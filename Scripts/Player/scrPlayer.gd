@@ -70,15 +70,16 @@ func _physics_process(delta):
 		
 		# These movement modules should only work if the player is not
 		# walljumping
-		if !is_walljumping:
-			handle_movement()
-			handle_jumping()
-			handle_shooting()
-			handle_water()
+		#if !is_walljumping:
+		handle_movement()
+		handle_walljumping(delta)
+		handle_jumping()
+		handle_shooting()
+		handle_water()
 		
 		# Walljumping is its own special case. If we are in a walljumping
 		# state, it deactivates the previous methods/modules
-		handle_walljumping()
+		
 		
 	
 	# These methods should be called before "move_and_slide()", and should
@@ -214,32 +215,33 @@ func handle_jumping() -> void:
 	# Always allow djump if you're grounded
 	if (is_on_floor() == true):
 		#d_jump = true
-		jumps = max_jumps;
+		if has_item(ITEMS.JUMP):
+			can_jump = true;
+		djumps = max_djumps;
 	
 	# Adds vertical velocity when jumping
 	if Input.is_action_just_pressed("button_jump"):
-		if (is_on_floor() == true && jumps > 0):
+		if (is_on_floor() == true && can_jump):
 			velocity.y = -s_jump_speed
 			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
 			
 			# Emit the "player_jumped" signal
 			player_jumped.emit()
-			jumps -= 1;
 			
 		# If d_jump is available or you're inside a platform, the player now
 		# jumps with d_jump_speed. Inside of platforms you can jump infinitely,
 		# and they are the ones who set d_jump_aux to true or false.
 		# Same logic applies to water
 		#elif d_jump or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
-		elif jumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
+		elif !just_walljumped && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
 
 			#velocity.y = -d_jump_speed
 			#d_jump = false
 			if d_jump_aux:
-				jumps = max_jumps - 1;
+				djumps = max_djumps;
 				velocity.y = -s_jump_speed
 			else:
-				jumps -= 1;
+				djumps -= 1;
 				velocity.y = -d_jump_speed
 			
 			
@@ -262,105 +264,106 @@ func handle_jumping() -> void:
 # Method that handles the walljumping gimmick. It's divided into 2 parts:
 # 1) Setting walljumping (whether it should be active or not)
 # 2) The "walljumping" action
-func handle_walljumping():
-	
-	# 1) Setting the walljump state:
-	# If we collided with a vine
-	if can_walljump:
-	
-		# Walljumping shouldn't activate if we're grounded. Otherwise,
-		# it if wasn't active before, it now is. Also sets the vertical
-		# velocity to 0, so we don't slide with inertia
-		if is_on_floor():
-			is_walljumping = false
-		else:
-			
-			if !is_walljumping:
-				velocity.y = 0
-				is_walljumping = true
-	else:
-		is_walljumping = false
-	
-	
-	
-	# 2) "Walljumping" action:
-	# If we are in a walljumping state, it slows our vertical speed down and
-	# prepares us for walljumping or leaving it altogether
-	if is_walljumping:
-		v_speed_modifier = 0.2
-		var jump_direction = get_wall_normal()
-		
-		# Lambda function, also called "anonymous function".
-		# It's a method that only works inside of this event, declared inside
-		# of a variable and executed by using "call()".
-		# Useful for keeping code cleaner and less repetitive in certain cases,
-		# but it's not mandatory
-		var walljumping_action = func():
-			velocity.x = jump_direction.x * h_speed
-			velocity.y = -s_jump_speed
-			is_walljumping = false
-			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
-			
-			# Emit the "player_walljumped" signal
-			player_walljumped.emit()
-		
-		# Walljumping should only happen if we hold the jump button first
-		if Input.is_action_pressed("button_jump"):
-			
-			# Extra keys off/on
-			if !GLOBAL_SETTINGS.EXTRA_KEYS:
-				
-				# Walljump to the right
-				if (Input.is_action_pressed("button_right")) and (jump_direction == Vector2.RIGHT):
-					if !Input.is_action_pressed("button_left"):
-						walljumping_action.call()
-				
-				# Walljump to the left
-				if Input.is_action_pressed("button_left") and (jump_direction == Vector2.LEFT):
-					if !Input.is_action_pressed("button_right"):
-						walljumping_action.call()
-			else:
-				
-				# Walljump to the right
-				if (Input.is_action_pressed("button_right") or Input.is_action_pressed("button_right_extra")) and (jump_direction == Vector2.RIGHT):
-					if (!Input.is_action_pressed("button_left") or !Input.is_action_pressed("button_left_extra")):
-						walljumping_action.call()
-				
-				# Walljump to the left
-				if (Input.is_action_pressed("button_left") or Input.is_action_pressed("button_left_extra")) and (jump_direction == Vector2.LEFT):
-					if (!Input.is_action_pressed("button_right") or !Input.is_action_pressed("button_right_extra")):
-						walljumping_action.call()
-		else:
-			
-			# Extra keys off/on
-			if !GLOBAL_SETTINGS.EXTRA_KEYS:
-				
-				# Not holding the jump button, but pressing left or right on the 
-				# opposite direction to the vine, leaves it and stops the
-				# walljumping state.
-				# This won't work if both the left and right buttons are pressed 
-				# at the same time. Feels cleaner this way
-				if Input.is_action_pressed("button_right") and (jump_direction == Vector2.RIGHT):
-					if !Input.is_action_pressed("button_left"):
-						is_walljumping = false
-				
-				if Input.is_action_pressed("button_left") and (jump_direction == Vector2.LEFT):
-					if !Input.is_action_pressed("button_right"):
-						is_walljumping = false
-			else:
-				if (Input.is_action_pressed("button_right") or Input.is_action_pressed("button_right_extra")) and (jump_direction == Vector2.RIGHT):
-					if (!Input.is_action_pressed("button_left") or !Input.is_action_pressed("button_left_extra")):
-						is_walljumping = false
-				
-				if (Input.is_action_pressed("button_left") or Input.is_action_pressed("button_left_extra")) and (jump_direction == Vector2.LEFT):
-					if (!Input.is_action_pressed("button_right") or !Input.is_action_pressed("button_right_extra")):
-						is_walljumping = false
-	else:
-		
-		# Sets things back to normal (not walljumping anymore).
-		# handle_water() sets the "v_speed_modifier" variable properly, so we
-		# just call it here instead of re-setting things manually
-		handle_water()
+
+#func handle_walljumping():
+	#
+	## 1) Setting the walljump state:
+	## If we collided with a vine
+	#if can_walljump:
+	#
+		## Walljumping shouldn't activate if we're grounded. Otherwise,
+		## it if wasn't active before, it now is. Also sets the vertical
+		## velocity to 0, so we don't slide with inertia
+		#if is_on_floor():
+			#is_walljumping = false
+		#else:
+			#
+			#if !is_walljumping:
+				#velocity.y = 0
+				#is_walljumping = true
+	#else:
+		#is_walljumping = false
+	#
+	#
+	#
+	## 2) "Walljumping" action:
+	## If we are in a walljumping state, it slows our vertical speed down and
+	## prepares us for walljumping or leaving it altogether
+	#if is_walljumping:
+		#v_speed_modifier = 0.2
+		#var jump_direction = get_wall_normal()
+		#
+		## Lambda function, also called "anonymous function".
+		## It's a method that only works inside of this event, declared inside
+		## of a variable and executed by using "call()".
+		## Useful for keeping code cleaner and less repetitive in certain cases,
+		## but it's not mandatory
+		#var walljumping_action = func():
+			#velocity.x = jump_direction.x * h_speed
+			#velocity.y = -s_jump_speed
+			#is_walljumping = false
+			#GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
+			#
+			## Emit the "player_walljumped" signal
+			#player_walljumped.emit()
+		#
+		## Walljumping should only happen if we hold the jump button first
+		#if Input.is_action_pressed("button_jump"):
+			#
+			## Extra keys off/on
+			#if !GLOBAL_SETTINGS.EXTRA_KEYS:
+				#
+				## Walljump to the right
+				#if (Input.is_action_pressed("button_right")) and (jump_direction == Vector2.RIGHT):
+					#if !Input.is_action_pressed("button_left"):
+						#walljumping_action.call()
+				#
+				## Walljump to the left
+				#if Input.is_action_pressed("button_left") and (jump_direction == Vector2.LEFT):
+					#if !Input.is_action_pressed("button_right"):
+						#walljumping_action.call()
+			#else:
+				#
+				## Walljump to the right
+				#if (Input.is_action_pressed("button_right") or Input.is_action_pressed("button_right_extra")) and (jump_direction == Vector2.RIGHT):
+					#if (!Input.is_action_pressed("button_left") or !Input.is_action_pressed("button_left_extra")):
+						#walljumping_action.call()
+				#
+				## Walljump to the left
+				#if (Input.is_action_pressed("button_left") or Input.is_action_pressed("button_left_extra")) and (jump_direction == Vector2.LEFT):
+					#if (!Input.is_action_pressed("button_right") or !Input.is_action_pressed("button_right_extra")):
+						#walljumping_action.call()
+		#else:
+			#
+			## Extra keys off/on
+			#if !GLOBAL_SETTINGS.EXTRA_KEYS:
+				#
+				## Not holding the jump button, but pressing left or right on the 
+				## opposite direction to the vine, leaves it and stops the
+				## walljumping state.
+				## This won't work if both the left and right buttons are pressed 
+				## at the same time. Feels cleaner this way
+				#if Input.is_action_pressed("button_right") and (jump_direction == Vector2.RIGHT):
+					#if !Input.is_action_pressed("button_left"):
+						#is_walljumping = false
+				#
+				#if Input.is_action_pressed("button_left") and (jump_direction == Vector2.LEFT):
+					#if !Input.is_action_pressed("button_right"):
+						#is_walljumping = false
+			#else:
+				#if (Input.is_action_pressed("button_right") or Input.is_action_pressed("button_right_extra")) and (jump_direction == Vector2.RIGHT):
+					#if (!Input.is_action_pressed("button_left") or !Input.is_action_pressed("button_left_extra")):
+						#is_walljumping = false
+				#
+				#if (Input.is_action_pressed("button_left") or Input.is_action_pressed("button_left_extra")) and (jump_direction == Vector2.LEFT):
+					#if (!Input.is_action_pressed("button_right") or !Input.is_action_pressed("button_right_extra")):
+						#is_walljumping = false
+	#else:
+		#
+		## Sets things back to normal (not walljumping anymore).
+		## handle_water() sets the "v_speed_modifier" variable properly, so we
+		## just call it here instead of re-setting things manually
+		#handle_water()
 
 
 # Shooting logic
@@ -579,8 +582,9 @@ var ITEMS := RND.ITEMS;
 var permanent_items = []
 var temporary_items = []
 
-var max_jumps = 0;
-var jumps = 0;
+var max_djumps = 0;
+var djumps = 0;
+var can_jump = true;
 var can_shoot = true;
 
 var dash_speed: int = 400
@@ -591,19 +595,23 @@ var current_dash_cooldown: float = 0;
 var can_dash = false;
 var dash_direction := "left";
 
+var wall_jump_duration: float = 0.1;
+var current_wall_jump_duration : float = 0;
+var wall_jump_direction := "left";
+var just_walljumped = false;
+
 var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
 
 func pickup_item(item):
 	match item:
 		ITEMS.JUMP:
-			if max_jumps < 1:
-				max_jumps = 1;
+			can_jump = true
 		ITEMS.DOUBLE_JUMP:
-			if max_jumps < 2:
-				max_jumps = 2;
+			if max_djumps < 1:
+				max_djumps = 1;
 		ITEMS.TRIPLE_JUMP:
-			if max_jumps < 3:
-				max_jumps = 3;
+			if max_djumps < 2:
+				max_djumps = 2;
 	
 	temporary_items.append(item);
 
@@ -620,10 +628,16 @@ func reset_items():
 func set_initial_items(items):
 	permanent_items.clear()
 	temporary_items.clear()
-	max_jumps = 0;
+	set_initial_state()
 	for item in items:
 		pickup_item(item);
 	store_items();
+
+func set_initial_state():
+	can_jump = false;
+	max_djumps = 0;
+	djumps = 0;
+	can_dash = false
 
 func handle_rnd_stuff(delta):
 	handle_dash(delta)
@@ -655,3 +669,52 @@ func handle_dash(delta):
 		elif dash_direction == "right":
 			velocity.x = dash_speed
 	
+func handle_walljumping(delta):
+	just_walljumped = false
+	if current_wall_jump_duration > 0:
+		current_wall_jump_duration = max(0, current_wall_jump_duration - delta)
+	
+	if is_on_wall_only() && has_item(ITEMS.WALL_JUMP):
+		is_walljumping = true
+		djumps = max_djumps
+		if velocity.y > 0:
+			v_speed_modifier = 0.5
+	else:
+		is_walljumping = false
+	
+	
+	
+	# 2) "Walljumping" action:
+	# If we are in a walljumping state, it slows our vertical speed down and
+	# prepares us for walljumping or leaving it altogether
+	if is_walljumping:
+		#v_speed_modifier = 0.2
+		var jump_direction = get_wall_normal()
+		
+		# Lambda function, also called "anonymous function".
+		# It's a method that only works inside of this event, declared inside
+		# of a variable and executed by using "call()".
+		# Useful for keeping code cleaner and less repetitive in certain cases,
+		# but it's not mandatory
+		var walljumping_action = func():
+			velocity.x = jump_direction.x * h_speed
+			velocity.y = -s_jump_speed
+			is_walljumping = false
+			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
+			wall_jump_direction = "right" if jump_direction.x > 0 else "left";
+			current_wall_jump_duration = wall_jump_duration;
+			just_walljumped = true;
+			
+			# Emit the "player_walljumped" signal
+			player_walljumped.emit()
+		
+		# Walljumping should only happen if we hold the jump button first
+		if Input.is_action_just_pressed("button_jump"):
+			walljumping_action.call()
+	
+	if current_wall_jump_duration > 0:
+		if wall_jump_direction == "right":
+			velocity.x = h_speed
+		else:
+			velocity.x = -h_speed
+		

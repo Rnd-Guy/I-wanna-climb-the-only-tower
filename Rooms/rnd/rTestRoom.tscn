@@ -104,6 +104,10 @@ item = 7
 [node name="SkillPickup" parent="Room_related" instance=ExtResource("8_f58xy")]
 position = Vector2(152, 536)
 
+[node name="SkillPickup3" parent="Room_related" instance=ExtResource("8_f58xy")]
+position = Vector2(368, 544)
+item = 6
+
 [node name="Gimmicks" type="Node2D" parent="."]
 
 [node name="Hazards" type="Node2D" parent="."]
