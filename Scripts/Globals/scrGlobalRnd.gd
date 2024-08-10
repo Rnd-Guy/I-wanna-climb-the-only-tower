@@ -1,0 +1,14 @@
+extends Node
+
+enum ITEMS {
+	JUMP,
+	DOUBLE_JUMP,
+	TRIPLE_JUMP,
+	GUN,
+	SWORD,
+	SPIKE_BOUNCE,
+	WALL_JUMP,
+	DASH,
+	KEY,
+	FILLER,
+}

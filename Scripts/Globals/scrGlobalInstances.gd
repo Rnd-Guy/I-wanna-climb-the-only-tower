@@ -7,4 +7,3 @@ extends Node
 
 # The player object
 var objPlayerID: Node = null
-

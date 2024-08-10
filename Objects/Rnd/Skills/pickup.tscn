@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://r46b1o0q6tpg"]
+
+[ext_resource type="Script" path="res://Objects/Rnd/Skills/pickup.gd" id="1_lhvhx"]
+[ext_resource type="Texture2D" uid="uid://l3peo4xpnpve" path="res://Graphics/Sprites/my_stuff/pickup.png" id="2_ollfn"]
+[ext_resource type="PackedScene" uid="uid://bffqoolqm576d" path="res://Objects/Rnd/EditorNode.tscn" id="3_bsg3q"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fyiku"]
+
+[node name="SkillPickup" type="Node2D"]
+script = ExtResource("1_lhvhx")
+item = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ollfn")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_fyiku")
+
+[node name="Arrow" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(0, -18)
+polygon = PackedVector2Array(-2, -18, -2, -18, -2, -12, 2, -12, 2, -18, 5, -18, 0, -26, -5, -18)
+
+[node name="EditorNode" parent="." instance=ExtResource("3_bsg3q")]
+
+[node name="Label" type="Label" parent="EditorNode"]
+offset_left = -98.0
+offset_top = 22.0
+offset_right = 89.0
+offset_bottom = 45.0
+text = "TRIPLE_JUMP"
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

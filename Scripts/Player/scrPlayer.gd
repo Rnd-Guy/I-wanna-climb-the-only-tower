@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+
 """
 ---------- VARIABLE DECLARATIONS ---------- 
 """
@@ -28,7 +29,7 @@ signal player_djumped
 signal player_walljumped
 signal player_shot
 
-
+#region Original code
 func _ready():
 	
 	# If a savefile exists (we've saved at least once), we move the player to
@@ -45,7 +46,7 @@ func _ready():
 	if GLOBAL_GAME.debug_hitbox:
 		$playerMask/ColorRect.visible = GLOBAL_GAME.debug_hitbox
 	
-	set_initial_skills(default_skills)
+	set_initial_items(default_items)
 
 
 """
@@ -78,12 +79,15 @@ func _physics_process(delta):
 		# Walljumping is its own special case. If we are in a walljumping
 		# state, it deactivates the previous methods/modules
 		handle_walljumping()
+		
 	
 	# These methods should be called before "move_and_slide()", and should
 	# always work (even if the player is frozen)
 	handle_masks()
 	handle_gravity(delta)
 	debug_mouse_teleport()
+	handle_rnd_stuff(delta)
+	
 	
 	# "move_and_slide()" handles all sorts of movement, using velocity values
 	# which includes running, jumping and more.
@@ -564,57 +568,90 @@ func _on_sheep_blocks_body_entered(body):
 		GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndSheepBlock)
 		body.animation_player.play("animSheepBlock")
 		body.activated = true
+#endregion
 
+#######################################################
 ## GAMEJAM SHENANIGANS
+########################################################
 
-enum {
-	JUMP,
-	DOUBLE_JUMP,
-	TRIPLE_JUMP,
-	GUN,
-	SWORD,
-	SPIKE_BOUNCE,
-	WALL_JUMP,
-	DASH,
-}
+var ITEMS := RND.ITEMS;
 
-var permanent_skills = []
-var temporary_skills = []
+var permanent_items = []
+var temporary_items = []
 
 var max_jumps = 0;
 var jumps = 0;
 var can_shoot = true;
 
-var default_skills = [JUMP, TRIPLE_JUMP, GUN]
+var dash_speed: int = 400
+var dash_duration: float = 0.25
+var current_dash_duration: float = 0;
+var dash_cooldown: float = 0.5
+var current_dash_cooldown: float = 0;
+var can_dash = false;
+var dash_direction := "left";
 
-func learn_skill(skill):
-	match skill:
-		JUMP:
+var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
+
+func pickup_item(item):
+	match item:
+		ITEMS.JUMP:
 			if max_jumps < 1:
 				max_jumps = 1;
-		DOUBLE_JUMP:
+		ITEMS.DOUBLE_JUMP:
 			if max_jumps < 2:
 				max_jumps = 2;
-		TRIPLE_JUMP:
+		ITEMS.TRIPLE_JUMP:
 			if max_jumps < 3:
 				max_jumps = 3;
 	
-	temporary_skills.append(skill);
+	temporary_items.append(item);
 
-func has_skill(skill):
-	return permanent_skills.has(skill) || temporary_skills.has(skill);
+func has_item(item):
+	return permanent_items.has(item) || temporary_items.has(item);
 
-func store_skills():
-	permanent_skills.append_array(temporary_skills);
-	temporary_skills.clear()
+func store_items():
+	permanent_items.append_array(temporary_items);
+	temporary_items.clear()
 
-func reset_skills():
-	temporary_skills.clear()
+func reset_items():
+	temporary_items.clear()
 
-func set_initial_skills(skills):
-	permanent_skills.clear()
-	temporary_skills.clear()
+func set_initial_items(items):
+	permanent_items.clear()
+	temporary_items.clear()
 	max_jumps = 0;
-	for skill in skills:
-		learn_skill(skill);
-	store_skills();
+	for item in items:
+		pickup_item(item);
+	store_items();
+
+func handle_rnd_stuff(delta):
+	handle_dash(delta)
+
+func handle_dash(delta):
+	if current_dash_duration > 0:
+		current_dash_duration = max(0, current_dash_duration - delta)
+		velocity.y = 0
+	if current_dash_cooldown > 0:
+		current_dash_cooldown = max(0, current_dash_cooldown - delta)
+	
+	if is_on_floor() && has_item(ITEMS.DASH):
+		can_dash = true
+	
+	if has_item(ITEMS.DASH) && Input.is_action_just_pressed("button_dash") && can_dash && current_dash_cooldown == 0:
+		current_dash_duration = dash_duration;
+		current_dash_cooldown = dash_cooldown;
+		can_dash = false
+		if Input.is_action_pressed("button_left"):
+			dash_direction = "left"
+		elif Input.is_action_pressed("button_right"):
+			dash_direction = "right"
+		else:
+			dash_direction = "right" if xscale else "left"
+
+	if current_dash_duration > 0:
+		if dash_direction == "left":
+			velocity.x = -dash_speed
+		elif dash_direction == "right":
+			velocity.x = dash_speed
+	
