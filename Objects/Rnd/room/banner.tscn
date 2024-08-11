@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dixmbu7c86cil"]
+
+[ext_resource type="Script" path="res://Objects/Rnd/room/banner.gd" id="1_5hcf6"]
+[ext_resource type="Texture2D" uid="uid://ctetqc7e21i5t" path="res://Graphics/Sprites/my_stuff/banner.png" id="1_ovmwl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_b20l3"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="banner" type="Node2D"]
+script = ExtResource("1_5hcf6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ovmwl")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -168.0
+offset_top = -20.0
+offset_right = 168.0
+offset_bottom = 3.0
+text = "World 1: World of the guy"
+label_settings = SubResource("LabelSettings_b20l3")
+horizontal_alignment = 1

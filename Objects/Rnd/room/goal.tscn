@@ -1,0 +1,146 @@
+[gd_scene load_steps=10 format=3 uid="uid://d1bykg82mlwje"]
+
+[ext_resource type="Script" path="res://Objects/Rnd/room/goal.gd" id="1_vacmx"]
+[ext_resource type="Texture2D" uid="uid://d1b5fudawkvtd" path="res://Graphics/Sprites/my_stuff/goal.png" id="1_vj0jr"]
+[ext_resource type="PackedScene" uid="uid://dixmbu7c86cil" path="res://Objects/Rnd/room/banner.tscn" id="3_dejag"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qs860"]
+size = Vector2(258, 2304)
+
+[sub_resource type="LabelSettings" id="LabelSettings_04lmo"]
+font_size = 48
+font_color = Color(0.952941, 0.588235, 0.027451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mebi4"]
+font_size = 48
+font_color = Color(0.952941, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_5tqfq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(312, -56)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/completed:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/press any key:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_iu0ad"]
+resource_name = "goal"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/banner:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(400, -56), Vector2(400, 64)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/completed:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/press any key:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wmiu6"]
+_data = {
+"RESET": SubResource("Animation_5tqfq"),
+"goal": SubResource("Animation_iu0ad")
+}
+
+[node name="goal" type="Node2D"]
+script = ExtResource("1_vacmx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -128)
+texture = ExtResource("1_vj0jr")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-1, -1152)
+shape = SubResource("RectangleShape2D_qs860")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="banner" parent="CanvasLayer" instance=ExtResource("3_dejag")]
+position = Vector2(312, -56)
+
+[node name="completed" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 264.0
+offset_top = 72.0
+offset_right = 548.0
+offset_bottom = 139.0
+text = "COMPLETED"
+label_settings = SubResource("LabelSettings_04lmo")
+
+[node name="press any key" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 136.0
+offset_top = 320.0
+offset_right = 728.0
+offset_bottom = 387.0
+text = "Press shoot to continue"
+label_settings = SubResource("LabelSettings_mebi4")
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wmiu6")
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

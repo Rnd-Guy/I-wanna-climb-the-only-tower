@@ -2,16 +2,29 @@ extends Control
 
 var ITEMS := RND.ITEMS
 
+var retry = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	GLOBAL_INSTANCES.objPlayerID.connect("player_item_change", handle_item_change)
-	handle_item_change()
+	if is_instance_valid(GLOBAL_INSTANCES.objPlayerID):
+		GLOBAL_INSTANCES.objPlayerID.connect("player_item_change", handle_item_change)
+		handle_item_change()
+	else:
+		retry = true
+		
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func _physics_process(delta: float) -> void:
+	if retry:
+		if is_instance_valid(GLOBAL_INSTANCES.objPlayerID):
+			GLOBAL_INSTANCES.objPlayerID.connect("player_item_change", handle_item_change)
+			handle_item_change()
+			retry = false
 
 func set_weapons(items):
 	if items.has(ITEMS.GUN):

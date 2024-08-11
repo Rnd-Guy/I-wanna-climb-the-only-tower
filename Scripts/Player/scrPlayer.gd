@@ -66,7 +66,7 @@ func _physics_process(delta):
 	# loop clean and easier to read.
 	# These methods should only work if the player isn't in the middle of a
 	# dialog sequence/cutscene
-	if !dead:
+	if !dead && !goaled:
 		if !frozen:
 			
 			# These movement modules should only work if the player is not
@@ -99,7 +99,7 @@ func _physics_process(delta):
 		# animation bug when resetting.
 		move_and_slide()
 		handle_animations()
-	else:
+	elif dead:
 		handle_death(delta)
 
 
@@ -639,6 +639,7 @@ var potential_safe_spot = position;
 var death_timer = 1
 var current_death_timer = 0
 var dead = false;
+var goaled = false;
 
 # proper
 #var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]

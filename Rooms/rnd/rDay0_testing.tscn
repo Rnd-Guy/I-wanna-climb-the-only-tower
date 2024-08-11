@@ -13,17 +13,18 @@
 [node name="Testing" type="Node2D" parent="."]
 
 [node name="objPlayer" parent="Testing" instance=ExtResource("4_00rl0")]
-position = Vector2(14, -20)
+position = Vector2(-241, -1152)
 
 [node name="allThePickups" parent="Testing" instance=ExtResource("6_kiynp")]
-position = Vector2(106, -14)
+position = Vector2(-154, -845)
 
 [node name="Environment" type="Node2D" parent="."]
 
 [node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_7tc2t")]
 position = Vector2(-16, 16)
 
-[node name="Node2D" parent="Environment" instance=ExtResource("2_ujodv")]
+[node name="room" parent="Environment" instance=ExtResource("2_ujodv")]
+warp_to = "res://Rooms/rnd/rDay1.tscn"
 
 [node name="Room_related" type="Node2D" parent="."]
 

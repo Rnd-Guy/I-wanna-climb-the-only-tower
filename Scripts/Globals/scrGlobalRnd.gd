@@ -26,3 +26,5 @@ enum DIR {
 	LEFT,
 	RIGHT
 }
+
+var world_name: String = "World 1"

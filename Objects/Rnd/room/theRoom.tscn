@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=4 uid="uid://diqydqyaklqwn"]
+[gd_scene load_steps=18 format=4 uid="uid://diqydqyaklqwn"]
 
+[ext_resource type="Script" path="res://Objects/Rnd/room/the_room.gd" id="1_mr73w"]
 [ext_resource type="PackedScene" uid="uid://du2jugqwm8g0a" path="res://Objects/Tiles/til16.tscn" id="1_ncjbw"]
 [ext_resource type="Texture2D" uid="uid://ce764rqb8dydy" path="res://Graphics/Tiles/tilAllTiles.png" id="1_r5kvd"]
 [ext_resource type="PackedScene" uid="uid://b31w5fm4w5857" path="res://Objects/Room_objects/objSavePoint.tscn" id="2_xv1br"]
@@ -9,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://dlwoh08g16ynx" path="res://Objects/Rnd/room/respawn_node.tscn" id="7_7ahpq"]
 [ext_resource type="PackedScene" uid="uid://b03pvv4xibak7" path="res://Objects/Rnd/room/safe_landing.tscn" id="8_xk13q"]
 [ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="9_dtimn"]
+[ext_resource type="PackedScene" uid="uid://dtmvdxwbxu3h6" path="res://Objects/Rnd/room/lock.tscn" id="10_cuqby"]
+[ext_resource type="PackedScene" uid="uid://d1bykg82mlwje" path="res://Objects/Rnd/room/goal.tscn" id="11_64wme"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20by8"]
 texture = ExtResource("1_r5kvd")
@@ -83,6 +86,7 @@ physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_1s4bh")
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_mr73w")
 
 [node name="til32" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -121,3 +125,10 @@ scale = Vector2(9.5, 0.7)
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="WeaponUi" parent="CanvasLayer" instance=ExtResource("9_dtimn")]
+
+[node name="lock" parent="." instance=ExtResource("10_cuqby")]
+position = Vector2(-224, -1292)
+scale = Vector2(0.5, 1.2)
+
+[node name="goal" parent="." instance=ExtResource("11_64wme")]
+position = Vector2(-352, -1568)
