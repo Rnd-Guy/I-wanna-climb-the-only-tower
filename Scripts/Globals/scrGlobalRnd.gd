@@ -28,3 +28,5 @@ enum DIR {
 }
 
 var world_name: String = "World 1"
+
+signal item_pickup;

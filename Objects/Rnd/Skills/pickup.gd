@@ -21,6 +21,7 @@ func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		if Input.is_action_just_pressed("button_up") && pickupable:
 			GLOBAL_INSTANCES.objPlayerID.pickup_item(item);
+			RND.item_pickup.emit(item);
 			queue_free()
 			
 

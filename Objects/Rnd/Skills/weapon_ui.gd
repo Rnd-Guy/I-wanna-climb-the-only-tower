@@ -6,6 +6,7 @@ var retry = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	RND.item_pickup.connect(pickup_notif)
 	if is_instance_valid(GLOBAL_INSTANCES.objPlayerID):
 		GLOBAL_INSTANCES.objPlayerID.connect("player_item_change", handle_item_change)
 		handle_item_change()
@@ -48,7 +49,22 @@ func set_weapon(weapon):
 			$Selector.position = $HBoxContainer/Sword.position;
 
 func handle_item_change():
-	set_weapons(GLOBAL_INSTANCES.objPlayerID.get_all_items())
-	
+	var all_items = GLOBAL_INSTANCES.objPlayerID.get_all_items();
+	set_weapons(all_items)
+	list_items(all_items)
 	# give time for the hboxcontainer to shift positions first
 	call_deferred("set_weapon", GLOBAL_INSTANCES.objPlayerID.weapon)
+	
+
+func list_items(items):
+	var text = ""
+	for item in items:
+		if text != "":
+			text += "\n"
+		text += RND.ITEMS.find_key(item)
+	$AbilityList.text = text;
+
+func pickup_notif(item):
+	$PickupNotif.text = "Picked up " + RND.ITEMS.find_key(item)
+	$AnimationPlayer.stop()
+	$AnimationPlayer.play("pickup")
