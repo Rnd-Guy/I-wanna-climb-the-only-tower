@@ -22,39 +22,39 @@ position = Vector2(128, -64)
 
 [node name="SkillPickup4" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(-128, -128)
-item = 3
+item = 4
 
 [node name="SkillPickup7" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(-128, -192)
-item = 6
+item = 7
 
 [node name="SkillPickup9" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(-128, -256)
-item = 8
+item = 9
 
 [node name="SkillPickup11" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(-128, -320)
-item = 10
+item = 11
 
 [node name="SkillPickup12" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(0, -320)
-item = 11
+item = 12
 
 [node name="SkillPickup10" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(0, -256)
-item = 9
+item = 10
 
 [node name="SkillPickup8" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(0, -192)
-item = 7
+item = 8
 
 [node name="SkillPickup5" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(0, -128)
-item = 4
+item = 5
 
 [node name="SkillPickup6" parent="." instance=ExtResource("1_q21we")]
 position = Vector2(128, -128)
-item = 5
+item = 6
 
 [node name="objMovingPlatform" parent="." instance=ExtResource("2_7c8kv")]
 position = Vector2(-128, -56)

@@ -213,56 +213,56 @@ func handle_movement() -> void:
 			xscale_to_direction.call(extra_direction_keys)
 
 
-# Jumping logic
-func handle_jumping() -> void:
-	
-	# Always allow djump if you're grounded
-	if (is_on_floor() == true):
-		#d_jump = true
-		if has_item(ITEMS.JUMP):
-			can_jump = true;
-		djumps = max_djumps;
-	
-	# Adds vertical velocity when jumping
-	if Input.is_action_just_pressed("button_jump"):
-		if (is_on_floor() == true && can_jump):
-			velocity.y = -s_jump_speed
-			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
-			
-			# Emit the "player_jumped" signal
-			player_jumped.emit()
-			
-		# If d_jump is available or you're inside a platform, the player now
-		# jumps with d_jump_speed. Inside of platforms you can jump infinitely,
-		# and they are the ones who set d_jump_aux to true or false.
-		# Same logic applies to water
-		#elif d_jump or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
-		elif !just_walljumped && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
-
-			#velocity.y = -d_jump_speed
-			#d_jump = false
-			if d_jump_aux:
-				djumps = max_djumps;
-				velocity.y = -s_jump_speed
-			else:
-				djumps -= 1;
-				velocity.y = -d_jump_speed
-			
-			
-			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndDJump)
-			
-			# Emit the "player_djumped" signal
-			player_djumped.emit()
-			
-			# Jump particles on djump, as long as the player is not in water
-			if (in_water == false):
-				var jump_particle_id = jump_particle.instantiate()
-				get_parent().add_child(jump_particle_id)
-				jump_particle_id.global_position = Vector2(global_position.x, global_position.y + 12)
-	
-	# Adds some "gravity" if you release the jump button mid-jump
-	if Input.is_action_just_released("button_jump") and (velocity.y < 0):
-		velocity.y *= jump_release_falloff
+## Jumping logic
+#func handle_jumping() -> void:
+	#
+	## Always allow djump if you're grounded
+	#if (is_on_floor() == true):
+		##d_jump = true
+		#if has_item(ITEMS.JUMP):
+			#can_jump = true;
+		#djumps = max_djumps;
+	#
+	## Adds vertical velocity when jumping
+	#if Input.is_action_just_pressed("button_jump"):
+		#if (is_on_floor() == true && can_jump):
+			#velocity.y = -s_jump_speed
+			#GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
+			#
+			## Emit the "player_jumped" signal
+			#player_jumped.emit()
+			#
+		## If d_jump is available or you're inside a platform, the player now
+		## jumps with d_jump_speed. Inside of platforms you can jump infinitely,
+		## and they are the ones who set d_jump_aux to true or false.
+		## Same logic applies to water
+		##elif d_jump or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
+		#elif !just_walljumped && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
+#
+			##velocity.y = -d_jump_speed
+			##d_jump = false
+			#if d_jump_aux:
+				#djumps = max_djumps;
+				#velocity.y = -s_jump_speed
+			#else:
+				#djumps -= 1;
+				#velocity.y = -d_jump_speed
+			#
+			#
+			#GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndDJump)
+			#
+			## Emit the "player_djumped" signal
+			#player_djumped.emit()
+			#
+			## Jump particles on djump, as long as the player is not in water
+			#if (in_water == false):
+				#var jump_particle_id = jump_particle.instantiate()
+				#get_parent().add_child(jump_particle_id)
+				#jump_particle_id.global_position = Vector2(global_position.x, global_position.y + 12)
+	#
+	## Adds some "gravity" if you release the jump button mid-jump
+	#if Input.is_action_just_released("button_jump") and (velocity.y < 0):
+		#velocity.y *= jump_release_falloff
 
 
 # Method that handles the walljumping gimmick. It's divided into 2 parts:
@@ -706,10 +706,9 @@ func get_all_items():
 	return items;
 
 func set_initial_state():
-	can_jump = false;
+	reset_movement_state()
 	max_djumps = 0;
 	djumps = 0;
-	can_dash = false
 	weapons = []
 	weapon = null;
 	$Sword/Right.modulate.a = 0
@@ -721,6 +720,22 @@ func set_initial_state():
 	$Sword/Up.visible = true
 	$Sword/Down.visible = true
 	bullets = 4;
+
+func reset_movement_state():
+	velocity.y = 0
+	can_jump = false;
+	can_dash = false;
+	djumps = max_djumps;
+	bullets = 4
+	current_dash_duration = 0
+	current_dash_cooldown = 0
+	current_autofire_timer = 0
+	current_gun_recoil_duration = 0
+	current_sword_cooldown = 0
+	current_sword_duration = 0
+	current_side_bounce_duration = 0
+	current_warp_timer = 0
+	current_wall_jump_duration = 0
 
 func handle_dash(delta):
 	if current_dash_duration > 0:
@@ -749,6 +764,55 @@ func handle_dash(delta):
 		elif dash_direction == DIR.RIGHT:
 			velocity.x = dash_speed
 	
+func handle_jumping() -> void:
+	
+	if (is_on_floor() == true):
+		#d_jump = true
+		if has_item(ITEMS.JUMP):
+			can_jump = true;
+		djumps = max_djumps;
+	
+	# Adds vertical velocity when jumping
+	if Input.is_action_just_pressed("button_jump"):
+		if (is_on_floor() == true && can_jump):
+			velocity.y = -s_jump_speed
+			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
+			
+			# Emit the "player_jumped" signal
+			player_jumped.emit()
+			
+		# If d_jump is available or you're inside a platform, the player now
+		# jumps with d_jump_speed. Inside of platforms you can jump infinitely,
+		# and they are the ones who set d_jump_aux to true or false.
+		# Same logic applies to water
+		#elif d_jump or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
+		elif !just_walljumped && current_dash_duration == 0 && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
+
+			#velocity.y = -d_jump_speed
+			#d_jump = false
+			if d_jump_aux:
+				djumps = max_djumps;
+				velocity.y = -s_jump_speed
+			else:
+				djumps -= 1;
+				velocity.y = -d_jump_speed
+			
+			
+			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndDJump)
+			
+			# Emit the "player_djumped" signal
+			player_djumped.emit()
+			
+			# Jump particles on djump, as long as the player is not in water
+			if (in_water == false):
+				var jump_particle_id = jump_particle.instantiate()
+				get_parent().add_child(jump_particle_id)
+				jump_particle_id.global_position = Vector2(global_position.x, global_position.y + 12)
+	
+	# Adds some "gravity" if you release the jump button mid-jump
+	if Input.is_action_just_released("button_jump") and (velocity.y < 0):
+		velocity.y *= jump_release_falloff
+	
 func handle_walljumping(delta):
 	just_walljumped = false
 	if current_wall_jump_duration > 0:
@@ -757,6 +821,8 @@ func handle_walljumping(delta):
 	if is_on_wall_only() && has_item(ITEMS.WALL_JUMP):
 		is_walljumping = true
 		djumps = max_djumps
+		if has_item(ITEMS.DASH):
+			can_dash = true
 		if velocity.y > 0:
 			v_speed_modifier = 0.5
 	else:
@@ -914,6 +980,8 @@ func _on_left_sword_bounce(body: Node2D) -> void:
 func _on_down_sword_bounce(body: Node2D) -> void:
 	velocity.y = -300
 	djumps = max_djumps
+	if has_item(ITEMS.DASH):
+		can_dash = true
 	_on_bounce()
 
 
@@ -949,10 +1017,10 @@ func handle_death(delta):
 		
 	if current_death_timer == 0 || Input.is_action_just_pressed("button_reset"):
 		dead = false
-		position = last_safe_spot
-		visible = true
+		handle_reset(true)
 
-func handle_reset():
-	if Input.is_action_just_pressed("button_reset"):
+func handle_reset(force_reset=false):
+	if Input.is_action_just_pressed("button_reset") || force_reset:
 		position = last_safe_spot
 		visible = true
+		reset_movement_state()

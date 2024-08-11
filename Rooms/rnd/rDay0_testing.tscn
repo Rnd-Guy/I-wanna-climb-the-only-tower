@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://di4v5spvv4k2v"]
+[gd_scene load_steps=8 format=3 uid="uid://di4v5spvv4k2v"]
 
 [ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_7tc2t"]
 [ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="2_ujodv"]
@@ -7,17 +7,16 @@
 [ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="5_e6ohy"]
 [ext_resource type="PackedScene" uid="uid://ct08ke3aillve" path="res://Objects/Rnd/Skills/all_the_pickups.tscn" id="6_kiynp"]
 [ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="6_us4tq"]
-[ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="7_ug8uu"]
 
 [node name="rTemplate" type="Node2D"]
 
 [node name="Testing" type="Node2D" parent="."]
 
 [node name="objPlayer" parent="Testing" instance=ExtResource("4_00rl0")]
-position = Vector2(709, 426)
+position = Vector2(14, -20)
 
 [node name="allThePickups" parent="Testing" instance=ExtResource("6_kiynp")]
-position = Vector2(682, 403)
+position = Vector2(106, -14)
 
 [node name="Environment" type="Node2D" parent="."]
 
@@ -69,9 +68,6 @@ item = 3
 
 [node name="Trigger_related" type="Node2D" parent="."]
 
-[node name="WeaponUi" parent="." instance=ExtResource("7_ug8uu")]
-unique_name_in_owner = true
-
 [node name="Helper text" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -88,8 +84,32 @@ text = "Easy:
 Double jump + dash
 Medium:
 Double jump + bounce
+Very Hard:
+Bounce (via above)"
+
+[node name="Label4" type="Label" parent="Helper text"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = -1307.0
+offset_right = 236.0
+offset_bottom = -1154.0
+text = "Easy:
+triple jump + dash
+Medium:
+Double jump + (dash | recoil | bounce)  / triple jump only "
+
+[node name="Label3" type="Label" parent="Helper text"]
+layout_mode = 0
+offset_left = 1195.0
+offset_top = 26.0
+offset_right = 1396.0
+offset_bottom = 179.0
+text = "Easy:
+Double jump + wall jump
+Medium:
+bounce
 Hard:
-Bounce + dash (via above)"
+wall jump + gun  recoil"
 
 [node name="Label2" type="Label" parent="Helper text"]
 layout_mode = 0
