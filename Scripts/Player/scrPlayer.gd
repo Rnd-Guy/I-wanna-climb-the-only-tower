@@ -74,7 +74,7 @@ func _physics_process(delta):
 		handle_movement()
 		handle_walljumping(delta)
 		handle_jumping()
-		handle_shooting()
+		handle_shooting(delta)
 		handle_water()
 		
 		# Walljumping is its own special case. If we are in a walljumping
@@ -366,32 +366,32 @@ func handle_jumping() -> void:
 		#handle_water()
 
 
-# Shooting logic
-func handle_shooting():
-	if Input.is_action_just_pressed("button_shoot"):
-		
-		# An equivalent to gamemaker's "instance_number() < 4"
-		# It checks how many nodes belonging to the "Bullet" group
-		# exist in the current scene
-		if get_tree().get_nodes_in_group("Bullet").size() < 4:
-			
-			# Loads the bullet scene, instances it, assigns the shooting direction
-			# and global position, makes a sound and then adds it to the main scene 
-			# (the actual game)
-			var create_bullet_id: AnimatableBody2D = create_bullet.instantiate()
-			if xscale:
-				create_bullet_id.looking_at = 1
-			else:
-				create_bullet_id.looking_at = -1
-			
-			# Bullet's x coordinate:
-			#	-Takes into account the global x
-			#	-The bullet spacing, relative to where we are looking at 
-			create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
-			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndShoot)
-			
-			# After everything is set and done, creates the bullet
-			get_parent().add_child(create_bullet_id)
+## Shooting logic
+#func handle_shooting():
+	#if Input.is_action_just_pressed("button_shoot"):
+		#
+		## An equivalent to gamemaker's "instance_number() < 4"
+		## It checks how many nodes belonging to the "Bullet" group
+		## exist in the current scene
+		#if get_tree().get_nodes_in_group("Bullet").size() < 4:
+			#
+			## Loads the bullet scene, instances it, assigns the shooting direction
+			## and global position, makes a sound and then adds it to the main scene 
+			## (the actual game)
+			#var create_bullet_id: AnimatableBody2D = create_bullet.instantiate()
+			#if xscale:
+				#create_bullet_id.looking_at = 1
+			#else:
+				#create_bullet_id.looking_at = -1
+			#
+			## Bullet's x coordinate:
+			##	-Takes into account the global x
+			##	-The bullet spacing, relative to where we are looking at 
+			#create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+			#GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndShoot)
+			#
+			## After everything is set and done, creates the bullet
+			#get_parent().add_child(create_bullet_id)
 
 
 # Method to handle sprite animations
@@ -600,7 +600,22 @@ var current_wall_jump_duration : float = 0;
 var wall_jump_direction := "left";
 var just_walljumped = false;
 
-var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
+var weapon = null;
+var weapons = [ITEMS.GUN]
+
+@onready var sword_node = $Sword/Right;
+var sword_duration = 0.2;
+var current_sword_duration = 0;
+var sword_cooldown = 0.3;
+var current_sword_cooldown = 0;
+
+# proper
+#var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
+
+# testing
+var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP]
+
+signal player_item_change
 
 func pickup_item(item):
 	match item:
@@ -612,8 +627,17 @@ func pickup_item(item):
 		ITEMS.TRIPLE_JUMP:
 			if max_djumps < 2:
 				max_djumps = 2;
+		ITEMS.GUN:
+			weapons.append(item)
+			if weapon == null:
+				weapon = item
+		ITEMS.SWORD:
+			weapons.append(item)
+			if weapon == null:
+				weapon = item
 	
 	temporary_items.append(item);
+	player_item_change.emit()
 
 func has_item(item):
 	return permanent_items.has(item) || temporary_items.has(item);
@@ -624,6 +648,7 @@ func store_items():
 
 func reset_items():
 	temporary_items.clear()
+	player_item_change.emit()
 
 func set_initial_items(items):
 	permanent_items.clear()
@@ -633,14 +658,23 @@ func set_initial_items(items):
 		pickup_item(item);
 	store_items();
 
+func get_all_items():
+	var items = [];
+	items.append_array(permanent_items)
+	items.append_array(temporary_items)
+	return items;
+
 func set_initial_state():
 	can_jump = false;
 	max_djumps = 0;
 	djumps = 0;
 	can_dash = false
+	weapons = []
+	weapon = null;
 
 func handle_rnd_stuff(delta):
 	handle_dash(delta)
+	handle_weapon_switching()
 
 func handle_dash(delta):
 	if current_dash_duration > 0:
@@ -718,3 +752,73 @@ func handle_walljumping(delta):
 		else:
 			velocity.x = -h_speed
 		
+func handle_weapon_switching():
+	var current_weapons = weapons.size()
+	if current_weapons > 1 && Input.is_action_just_pressed("button_switch_weapon"):
+		var index = weapons.find(weapon)
+		weapon = weapons[(index + 1) % current_weapons]
+		player_item_change.emit()
+		
+# Shooting logic
+func handle_shooting(delta):
+	if weapon == ITEMS.GUN:
+		handle_gun()
+	elif weapon == ITEMS.SWORD:
+		handle_sword(delta)
+
+func handle_gun():
+	if Input.is_action_just_pressed("button_shoot"):
+			# An equivalent to gamemaker's "instance_number() < 4"
+		# It checks how many nodes belonging to the "Bullet" group
+		# exist in the current scene
+		if get_tree().get_nodes_in_group("Bullet").size() < 4:
+			
+			# Loads the bullet scene, instances it, assigns the shooting direction
+			# and global position, makes a sound and then adds it to the main scene 
+			# (the actual game)
+			var create_bullet_id: AnimatableBody2D = create_bullet.instantiate()
+			if xscale:
+				create_bullet_id.looking_at = 1
+			else:
+				create_bullet_id.looking_at = -1
+			
+			# Bullet's x coordinate:
+			#	-Takes into account the global x
+			#	-The bullet spacing, relative to where we are looking at 
+			create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndShoot)
+			
+			# After everything is set and done, creates the bullet
+			get_parent().add_child(create_bullet_id)
+
+func handle_sword(delta):
+	if current_sword_duration > 0:
+		current_sword_duration = max(0, current_sword_duration - delta)
+	if current_sword_cooldown > 0:
+		current_sword_cooldown = max(0, current_sword_cooldown - delta)
+	
+	if Input.is_action_just_pressed("button_shoot") && current_sword_cooldown == 0:
+		current_sword_duration = sword_duration;
+		current_sword_cooldown = sword_cooldown;
+		if Input.is_action_pressed("button_down"):
+			sword_node = $Sword/Down
+		elif Input.is_action_pressed("button_up"):
+			sword_node = $Sword/Up
+		elif Input.is_action_pressed("button_left"):
+			sword_node = $Sword/Left
+		elif Input.is_action_pressed("button_right"):
+			sword_node = $Sword/Right
+		else:
+			sword_node = $Sword/Right if xscale else $Sword/Left;
+	
+	if current_sword_duration > 0:
+		sword_node.modulate.a = current_sword_duration / sword_duration;
+		sword_node.get_node("Area2D/CollisionShape2D").disabled = false;
+	else:
+		sword_node.modulate.a = 0;
+		sword_node.get_node("Area2D/CollisionShape2D").disabled = true;
+
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	print(sword_node.name)
+	pass # Replace with function body.

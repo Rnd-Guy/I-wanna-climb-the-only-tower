@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgsapabrymhnx"]
+
+[ext_resource type="Script" path="res://Objects/Rnd/Skills/weapon_ui.gd" id="1_81ga2"]
+[ext_resource type="Texture2D" uid="uid://cndy847c7g5ob" path="res://Graphics/Sprites/my_stuff/weapon_gun.png" id="1_tvnqi"]
+[ext_resource type="Texture2D" uid="uid://degtgh8owaqpg" path="res://Graphics/Sprites/my_stuff/weapon_sword.png" id="2_ryi1v"]
+[ext_resource type="Texture2D" uid="uid://bv7mdxmwi7og8" path="res://Graphics/Sprites/my_stuff/weapon-selector.png" id="3_fbo3j"]
+
+[node name="WeaponUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_81ga2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+
+[node name="Gun" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_tvnqi")
+
+[node name="Sword" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_ryi1v")
+
+[node name="Selector" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_fbo3j")

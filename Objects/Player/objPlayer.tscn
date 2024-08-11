@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bp5rqk4l7tesk"]
+[gd_scene load_steps=32 format=3 uid="uid://bp5rqk4l7tesk"]
 
 [ext_resource type="Script" path="res://Scripts/Player/scrPlayer.gd" id="1_qesj7"]
 [ext_resource type="Texture2D" uid="uid://burygy08cq204" path="res://Graphics/Sprites/Player/sprPlayerFall.png" id="2_vhr1p"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dbu5de27ltlgx" path="res://Graphics/Sprites/Player/sprPlayerJump.png" id="4_m4r65"]
 [ext_resource type="Texture2D" uid="uid://nc32sed5ti8l" path="res://Graphics/Sprites/Player/sprPlayerRunning.png" id="5_e7ay4"]
 [ext_resource type="Texture2D" uid="uid://iek6jj5sm1cc" path="res://Graphics/Sprites/Player/sprPlayerSliding.png" id="5_ps24y"]
+[ext_resource type="Texture2D" uid="uid://biyfjkj6hcs6l" path="res://Graphics/Sprites/my_stuff/sword_attack.png" id="7_ouvco"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b5dja"]
 atlas = ExtResource("2_vhr1p")
@@ -165,6 +166,9 @@ size = Vector2(1, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mo373"]
 size = Vector2(12, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6p85w"]
+size = Vector2(48, 32)
+
 [node name="objPlayer" type="CharacterBody2D" groups=["Player"]]
 z_index = 2
 collision_mask = 6
@@ -260,6 +264,67 @@ position = Vector2(1, 6)
 shape = SubResource("RectangleShape2D_mo373")
 debug_color = Color(1, 0.00784314, 0.0509804, 0.419608)
 
+[node name="Sword" type="Node2D" parent="."]
+
+[node name="Right" type="Sprite2D" parent="Sword"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(48, 8)
+texture = ExtResource("7_ouvco")
+
+[node name="Area2D" type="Area2D" parent="Sword/Right"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Right/Area2D"]
+position = Vector2(-8, 0)
+shape = SubResource("RectangleShape2D_6p85w")
+disabled = true
+
+[node name="Left" type="Sprite2D" parent="Sword"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(-48, 8)
+scale = Vector2(-1, -1)
+texture = ExtResource("7_ouvco")
+
+[node name="Area2D" type="Area2D" parent="Sword/Left"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Left/Area2D"]
+position = Vector2(-8, 0)
+shape = SubResource("RectangleShape2D_6p85w")
+disabled = true
+
+[node name="Down" type="Sprite2D" parent="Sword"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, 56)
+rotation = 1.5708
+texture = ExtResource("7_ouvco")
+
+[node name="Area2D" type="Area2D" parent="Sword/Down"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Down/Area2D"]
+position = Vector2(-8, 0)
+shape = SubResource("RectangleShape2D_6p85w")
+disabled = true
+
+[node name="Up" type="Sprite2D" parent="Sword"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, -40)
+rotation = 4.71239
+texture = ExtResource("7_ouvco")
+
+[node name="Area2D" type="Area2D" parent="Sword/Up"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Up/Area2D"]
+position = Vector2(-8, 0)
+shape = SubResource("RectangleShape2D_6p85w")
+disabled = true
+
 [connection signal="body_entered" from="extraCollisions/Platforms" to="." method="_on_platforms_body_entered"]
 [connection signal="body_exited" from="extraCollisions/Platforms" to="." method="_on_platforms_body_exited"]
 [connection signal="body_entered" from="extraCollisions/Killers" to="." method="_on_killers_body_entered"]
@@ -269,3 +334,7 @@ debug_color = Color(1, 0.00784314, 0.0509804, 0.419608)
 [connection signal="body_entered" from="extraCollisions/Vines" to="." method="_on_vines_body_entered"]
 [connection signal="body_exited" from="extraCollisions/Vines" to="." method="_on_vines_body_exited"]
 [connection signal="body_entered" from="extraCollisions/SheepBlocks" to="." method="_on_sheep_blocks_body_entered"]
+[connection signal="area_entered" from="Sword/Right/Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_entered" from="Sword/Left/Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_entered" from="Sword/Down/Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_entered" from="Sword/Up/Area2D" to="." method="_on_area_2d_area_entered"]
