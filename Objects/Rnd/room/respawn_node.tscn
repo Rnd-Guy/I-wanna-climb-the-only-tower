@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlwoh08g16ynx"]
+
+[ext_resource type="Script" path="res://Objects/Rnd/room/respawn_node.gd" id="1_ytbo4"]
+
+[node name="RespawnNode" type="Node2D"]
+script = ExtResource("1_ytbo4")

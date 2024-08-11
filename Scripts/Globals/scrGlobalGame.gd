@@ -197,7 +197,8 @@ func handle_resetting() -> void:
 	# To avoid R spamming, we check for a single-frame press. As long as we're
 	# allowed to reset and we press the proper button, we will reset
 	if Input.is_action_just_pressed("button_reset") and (can_reset):
-		reset()
+		#reset()
+		pass
 
 
 # Conditionless reset. Call this to reset directly, without any kind of

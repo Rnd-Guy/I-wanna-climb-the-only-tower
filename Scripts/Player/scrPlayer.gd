@@ -66,37 +66,41 @@ func _physics_process(delta):
 	# loop clean and easier to read.
 	# These methods should only work if the player isn't in the middle of a
 	# dialog sequence/cutscene
-	if !frozen:
+	if !dead:
+		if !frozen:
+			
+			# These movement modules should only work if the player is not
+			# walljumping
+			#if !is_walljumping:
+			handle_safe_spot()
+			handle_movement()
+			handle_walljumping(delta)
+			handle_jumping()
+			handle_shooting(delta)
+			handle_water()
+			
+			# Walljumping is its own special case. If we are in a walljumping
+			# state, it deactivates the previous methods/modules
+			
+			
 		
-		# These movement modules should only work if the player is not
-		# walljumping
-		#if !is_walljumping:
-		handle_movement()
-		handle_walljumping(delta)
-		handle_jumping()
-		handle_shooting(delta)
-		handle_water()
-		
-		# Walljumping is its own special case. If we are in a walljumping
-		# state, it deactivates the previous methods/modules
+		# These methods should be called before "move_and_slide()", and should
+		# always work (even if the player is frozen)
+		handle_masks()
+		handle_gravity(delta)
+		debug_mouse_teleport()
+		handle_rnd_stuff(delta)
 		
 		
-	
-	# These methods should be called before "move_and_slide()", and should
-	# always work (even if the player is frozen)
-	handle_masks()
-	handle_gravity(delta)
-	debug_mouse_teleport()
-	handle_rnd_stuff(delta)
-	
-	
-	# "move_and_slide()" handles all sorts of movement, using velocity values
-	# which includes running, jumping and more.
-	# Call it before "_handle_animations()". Doing so will properly check for
-	# "is_on_floor()", which requires collision data. This prevents a 1 frame
-	# animation bug when resetting.
-	move_and_slide()
-	handle_animations()
+		# "move_and_slide()" handles all sorts of movement, using velocity values
+		# which includes running, jumping and more.
+		# Call it before "_handle_animations()". Doing so will properly check for
+		# "is_on_floor()", which requires collision data. This prevents a 1 frame
+		# animation bug when resetting.
+		move_and_slide()
+		handle_animations()
+	else:
+		handle_death(delta)
 
 
 # Debug key inputs
@@ -521,7 +525,10 @@ func on_death():
 		player_died.emit()
 		
 		# Destroys the player
-		queue_free()
+		#queue_free()
+		dead = true
+		current_death_timer = death_timer
+		visible = false
 
 
 
@@ -623,6 +630,16 @@ var current_bullets = 4;
 var autofire_timer = 0.1;
 var current_autofire_timer = 0;
 
+var warp_timer = 2
+var current_warp_timer = 0;
+var warp_node = null;
+var is_safe = false;
+var last_safe_spot = position;
+var potential_safe_spot = position;
+var death_timer = 1
+var current_death_timer = 0
+var dead = false;
+
 # proper
 #var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
 
@@ -630,6 +647,12 @@ var current_autofire_timer = 0;
 var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP]
 
 signal player_item_change
+
+func handle_rnd_stuff(delta):
+	handle_dash(delta)
+	handle_weapon_switching()
+	handle_reset()
+	handle_warp(delta)
 
 func pickup_item(item):
 	match item:
@@ -698,10 +721,6 @@ func set_initial_state():
 	$Sword/Up.visible = true
 	$Sword/Down.visible = true
 	bullets = 4;
-
-func handle_rnd_stuff(delta):
-	handle_dash(delta)
-	handle_weapon_switching()
 
 func handle_dash(delta):
 	if current_dash_duration > 0:
@@ -902,3 +921,38 @@ func _on_up_sword_bounce(body: Node2D) -> void:
 	if velocity.y < 200:
 		velocity.y = 200;
 	_on_bounce()
+
+func handle_safe_spot():
+	#if is_safe && is_on_floor():
+		
+	# for now just save if we've been on the grouhd for at least 2 frames
+	if is_on_floor():
+		if potential_safe_spot != null:
+			last_safe_spot = potential_safe_spot
+		potential_safe_spot = position;
+	else:
+		potential_safe_spot = null
+
+func handle_warp(delta):
+	if Input.is_action_pressed("button_reset"):
+		current_warp_timer += delta;
+		if current_warp_timer >= warp_timer && is_instance_valid(warp_node):
+			position = warp_node.position;
+	else:
+		current_warp_timer = 0;
+	
+	$Warp/WarpProgress.value = (current_warp_timer / warp_timer) * 100
+
+func handle_death(delta):
+	if current_death_timer > 0:
+		current_death_timer = max(0, current_death_timer - delta)
+		
+	if current_death_timer == 0 || Input.is_action_just_pressed("button_reset"):
+		dead = false
+		position = last_safe_spot
+		visible = true
+
+func handle_reset():
+	if Input.is_action_just_pressed("button_reset"):
+		position = last_safe_spot
+		visible = true

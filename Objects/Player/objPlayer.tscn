@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bp5rqk4l7tesk"]
+[gd_scene load_steps=34 format=3 uid="uid://bp5rqk4l7tesk"]
 
 [ext_resource type="Script" path="res://Scripts/Player/scrPlayer.gd" id="1_qesj7"]
 [ext_resource type="Texture2D" uid="uid://burygy08cq204" path="res://Graphics/Sprites/Player/sprPlayerFall.png" id="2_vhr1p"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://nc32sed5ti8l" path="res://Graphics/Sprites/Player/sprPlayerRunning.png" id="5_e7ay4"]
 [ext_resource type="Texture2D" uid="uid://iek6jj5sm1cc" path="res://Graphics/Sprites/Player/sprPlayerSliding.png" id="5_ps24y"]
 [ext_resource type="Texture2D" uid="uid://biyfjkj6hcs6l" path="res://Graphics/Sprites/my_stuff/sword_attack.png" id="7_ouvco"]
+[ext_resource type="Texture2D" uid="uid://cqsk6w0ogxqsy" path="res://Graphics/Sprites/my_stuff/warp_circle.png" id="8_5obhk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b5dja"]
 atlas = ExtResource("2_vhr1p")
@@ -327,6 +328,23 @@ collision_mask = 2056
 position = Vector2(-8, 0)
 shape = SubResource("RectangleShape2D_6p85w")
 disabled = true
+
+[node name="Warp" type="Node2D" parent="."]
+
+[node name="WarpProgress" type="TextureProgressBar" parent="Warp"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 16.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 4
+texture_progress = ExtResource("8_5obhk")
 
 [connection signal="body_entered" from="extraCollisions/Platforms" to="." method="_on_platforms_body_entered"]
 [connection signal="body_exited" from="extraCollisions/Platforms" to="." method="_on_platforms_body_exited"]

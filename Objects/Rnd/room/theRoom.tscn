@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://diqydqyaklqwn"]
+[gd_scene load_steps=14 format=4 uid="uid://diqydqyaklqwn"]
 
 [ext_resource type="PackedScene" uid="uid://du2jugqwm8g0a" path="res://Objects/Tiles/til16.tscn" id="1_ncjbw"]
 [ext_resource type="Texture2D" uid="uid://ce764rqb8dydy" path="res://Graphics/Tiles/tilAllTiles.png" id="1_r5kvd"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dw4a6bqoh6dd8" path="res://Graphics/Tiles/tilSlopes.png" id="2_y20cf"]
 [ext_resource type="Texture2D" uid="uid://mgx6x5nn2vb8" path="res://Graphics/Tilemaps/tilSpikes.png" id="5_u30ni"]
 [ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="6_dyf7k"]
+[ext_resource type="PackedScene" uid="uid://dlwoh08g16ynx" path="res://Objects/Rnd/room/respawn_node.tscn" id="7_7ahpq"]
+[ext_resource type="PackedScene" uid="uid://b03pvv4xibak7" path="res://Objects/Rnd/room/safe_landing.tscn" id="8_xk13q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20by8"]
 texture = ExtResource("1_r5kvd")
@@ -90,6 +92,7 @@ rendering_quadrant_size = 32
 [node name="til16" parent="." instance=ExtResource("1_ncjbw")]
 
 [node name="objSavePoint" parent="." instance=ExtResource("2_xv1br")]
+visible = false
 position = Vector2(0.999998, -67)
 scale = Vector2(4.79828, 4.05501)
 
@@ -100,3 +103,16 @@ tile_set = SubResource("TileSet_5lym1")
 
 [node name="Spike16" parent="." instance=ExtResource("6_dyf7k")]
 tile_map_data = PackedByteArray("AAAkADEAAQABAAAAAAAlADEAAQABAAAAAAAmADEAAQABAAAAAAAnADEAAQABAAAAAAA=")
+
+[node name="RespawnNode" parent="." instance=ExtResource("7_7ahpq")]
+position = Vector2(0, -25)
+
+[node name="SafeSpots" type="Node2D" parent="."]
+
+[node name="SafeLanding" parent="SafeSpots" instance=ExtResource("8_xk13q")]
+position = Vector2(-784, 432)
+scale = Vector2(47, 0.5)
+
+[node name="SafeLanding2" parent="SafeSpots" instance=ExtResource("8_xk13q")]
+position = Vector2(-128, -16)
+scale = Vector2(9.5, 0.7)
