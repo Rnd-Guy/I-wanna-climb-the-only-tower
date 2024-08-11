@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://roem40xx8spe"]
+
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_sn0yt"]
+[ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="2_4wqef"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="4_wrcd3"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="5_pv4n1"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="6_othd3"]
+[ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="7_inwk5"]
+[ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="8_8bit2"]
+
+[node name="rTemplate" type="Node2D"]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_sn0yt")]
+position = Vector2(-16, 16)
+
+[node name="Node2D" parent="Environment" instance=ExtResource("2_4wqef")]
+
+[node name="Room_related" type="Node2D" parent="."]
+
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("4_wrcd3")]
+position = Vector2(-16, 48)
+target_node = NodePath("../objPlayer")
+stop_left_at = -2000
+stop_up_at = -2000
+stop_right_at = 2000
+stop_down_at = 2000
+
+[node name="objPlayer" parent="Room_related" instance=ExtResource("5_pv4n1")]
+position = Vector2(-709, 421)
+
+[node name="SkillPickup2" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(-412, 392)
+item = 7
+
+[node name="SkillPickup" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(152, 536)
+
+[node name="SkillPickup3" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(-615, 594)
+item = 6
+
+[node name="SkillPickup4" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(-655, 438)
+item = 5
+
+[node name="SkillPickup6" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(-768, 432)
+item = 6
+
+[node name="SkillPickup7" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(402, 382)
+item = 4
+
+[node name="SkillPickup5" parent="Room_related" instance=ExtResource("6_othd3")]
+position = Vector2(-475, 338)
+item = 3
+
+[node name="Gimmicks" type="Node2D" parent="."]
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Spike16Layer" parent="Hazards" instance=ExtResource("7_inwk5")]
+tile_map_data = PackedByteArray(0, 0, 46, 0, 30, 0, 0, 0, 1, 0, 0, 0, 0, 0, 47, 0, 28, 0, 1, 0, 0, 0, 1, 0, 0, 0, 47, 0, 25, 0, 1, 0, 0, 0, 1, 0, 0, 0, 47, 0, 22, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Trigger_related" type="Node2D" parent="."]
+
+[node name="WeaponUi" parent="." instance=ExtResource("8_8bit2")]
+unique_name_in_owner = true

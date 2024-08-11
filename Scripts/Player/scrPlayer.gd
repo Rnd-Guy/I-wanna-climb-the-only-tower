@@ -577,12 +577,8 @@ func _on_sheep_blocks_body_entered(body):
 ## GAMEJAM SHENANIGANS
 ########################################################
 
-enum {
-	LEFT,
-	RIGHT
-}
-
 var ITEMS := RND.ITEMS;
+var DIR := RND.DIR;
 
 var permanent_items = []
 var temporary_items = []
@@ -598,11 +594,11 @@ var current_dash_duration: float = 0;
 var dash_cooldown: float = 0.5
 var current_dash_cooldown: float = 0;
 var can_dash = false;
-var dash_direction := LEFT;
+var dash_direction := DIR.LEFT;
 
 var wall_jump_duration: float = 0.1;
 var current_wall_jump_duration : float = 0;
-var wall_jump_direction := LEFT;
+var wall_jump_direction := DIR.LEFT;
 var just_walljumped = false;
 
 var weapon = null;
@@ -616,7 +612,16 @@ var current_sword_cooldown = 0;
 var side_bounce_duration = 0.1;
 var current_side_bounce_duration = 0;
 var side_bounce_speed = 400;
-var side_bounce_direction = LEFT;
+var side_bounce_direction = DIR.LEFT;
+
+var gun_recoil_direction = DIR.LEFT;
+var gun_recoil_speed = 400;
+var gun_recoil_duration = 0.1;
+var current_gun_recoil_duration = 0;
+var bullets = 4;
+var current_bullets = 4;
+var autofire_timer = 0.1;
+var current_autofire_timer = 0;
 
 # proper
 #var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
@@ -636,6 +641,8 @@ func pickup_item(item):
 		ITEMS.TRIPLE_JUMP:
 			if max_djumps < 2:
 				max_djumps = 2;
+		ITEMS.INFINITE_JUMP:
+			max_djumps = 9999999
 		ITEMS.GUN:
 			weapons.append(item)
 			if weapon == null:
@@ -644,6 +651,8 @@ func pickup_item(item):
 			weapons.append(item)
 			if weapon == null:
 				weapon = item
+		ITEMS.GUN_INFINITE_AMMO:
+			bullets = 99999999
 	
 	temporary_items.append(item);
 	player_item_change.emit()
@@ -684,6 +693,11 @@ func set_initial_state():
 	$Sword/Left.modulate.a = 0
 	$Sword/Up.modulate.a = 0
 	$Sword/Down.modulate.a = 0
+	$Sword/Right.visible = true
+	$Sword/Left.visible = true
+	$Sword/Up.visible = true
+	$Sword/Down.visible = true
+	bullets = 4;
 
 func handle_rnd_stuff(delta):
 	handle_dash(delta)
@@ -704,16 +718,16 @@ func handle_dash(delta):
 		current_dash_cooldown = dash_cooldown;
 		can_dash = false
 		if Input.is_action_pressed("button_left"):
-			dash_direction = LEFT
+			dash_direction = DIR.LEFT
 		elif Input.is_action_pressed("button_right"):
-			dash_direction = RIGHT
+			dash_direction = DIR.RIGHT
 		else:
-			dash_direction = RIGHT if xscale else LEFT
+			dash_direction = DIR.RIGHT if xscale else DIR.LEFT
 
 	if current_dash_duration > 0:
-		if dash_direction == LEFT:
+		if dash_direction == DIR.LEFT:
 			velocity.x = -dash_speed
-		elif dash_direction == RIGHT:
+		elif dash_direction == DIR.RIGHT:
 			velocity.x = dash_speed
 	
 func handle_walljumping(delta):
@@ -729,26 +743,16 @@ func handle_walljumping(delta):
 	else:
 		is_walljumping = false
 	
-	
-	
-	# 2) "Walljumping" action:
-	# If we are in a walljumping state, it slows our vertical speed down and
-	# prepares us for walljumping or leaving it altogether
 	if is_walljumping:
 		#v_speed_modifier = 0.2
 		var jump_direction = get_wall_normal()
 		
-		# Lambda function, also called "anonymous function".
-		# It's a method that only works inside of this event, declared inside
-		# of a variable and executed by using "call()".
-		# Useful for keeping code cleaner and less repetitive in certain cases,
-		# but it's not mandatory
 		var walljumping_action = func():
 			velocity.x = jump_direction.x * h_speed
 			velocity.y = -s_jump_speed
 			is_walljumping = false
 			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
-			wall_jump_direction = RIGHT if jump_direction.x > 0 else LEFT;
+			wall_jump_direction = DIR.RIGHT if jump_direction.x > 0 else DIR.LEFT;
 			current_wall_jump_duration = wall_jump_duration;
 			just_walljumped = true;
 			
@@ -760,7 +764,7 @@ func handle_walljumping(delta):
 			walljumping_action.call()
 	
 	if current_wall_jump_duration > 0:
-		if wall_jump_direction == RIGHT:
+		if wall_jump_direction == DIR.RIGHT:
 			velocity.x = h_speed
 		else:
 			velocity.x = -h_speed
@@ -775,34 +779,69 @@ func handle_weapon_switching():
 # Shooting logic
 func handle_shooting(delta):
 	if weapon == ITEMS.GUN:
-		handle_gun()
+		handle_gun(delta)
 	elif weapon == ITEMS.SWORD:
 		handle_sword(delta)
 
-func handle_gun():
-	if Input.is_action_just_pressed("button_shoot"):
+func handle_gun(delta):
+	if current_gun_recoil_duration > 0:
+		current_gun_recoil_duration = max(0, current_gun_recoil_duration - delta)
+	if current_autofire_timer > 0:
+		current_autofire_timer = max(0, current_autofire_timer - delta);
+	
+	if is_on_floor() || (is_on_wall_only() && has_item(ITEMS.WALL_JUMP)):
+		current_bullets = bullets
+	
+	if Input.is_action_just_pressed("button_shoot") || (Input.is_action_pressed("button_shoot") && current_autofire_timer == 0):
+		
 			# An equivalent to gamemaker's "instance_number() < 4"
 		# It checks how many nodes belonging to the "Bullet" group
 		# exist in the current scene
-		if get_tree().get_nodes_in_group("Bullet").size() < 4:
-			
+		#if get_tree().get_nodes_in_group("Bullet").size() < 4:
+		if current_bullets > 0:
+			current_bullets -= 1;
+			current_autofire_timer = autofire_timer;
 			# Loads the bullet scene, instances it, assigns the shooting direction
 			# and global position, makes a sound and then adds it to the main scene 
 			# (the actual game)
 			var create_bullet_id: AnimatableBody2D = create_bullet.instantiate()
-			if xscale:
-				create_bullet_id.looking_at = 1
-			else:
-				create_bullet_id.looking_at = -1
 			
 			# Bullet's x coordinate:
 			#	-Takes into account the global x
 			#	-The bullet spacing, relative to where we are looking at 
-			create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+			if Input.is_action_pressed("button_up"):
+				create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+				create_bullet_id.looking_at = DIR.UP
+				gun_recoil_direction = DIR.DOWN
+			elif Input.is_action_pressed("button_down"):
+				create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+				create_bullet_id.looking_at = DIR.DOWN
+				gun_recoil_direction = DIR.UP
+			else:
+				create_bullet_id.global_position = Vector2(global_position.x, global_position.y + 5)
+				if xscale:
+					create_bullet_id.looking_at = DIR.RIGHT
+					gun_recoil_direction = DIR.LEFT
+				else:
+					create_bullet_id.looking_at = DIR.LEFT
+					gun_recoil_direction = DIR.RIGHT
+				
+			if has_item(ITEMS.GUN_RECOIL):
+				match gun_recoil_direction:
+					DIR.UP:
+						velocity.y = -200
+					DIR.DOWN:
+						if velocity.y < 100:
+							velocity.y = 100
+					DIR.LEFT, DIR.RIGHT:
+						current_gun_recoil_duration = gun_recoil_duration;
 			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndShoot)
 			
 			# After everything is set and done, creates the bullet
 			get_parent().add_child(create_bullet_id)
+	
+	if current_gun_recoil_duration > 0:
+		velocity.x = gun_recoil_speed if gun_recoil_direction == DIR.RIGHT else -gun_recoil_speed
 
 func handle_sword(delta):
 	if current_sword_duration > 0:
@@ -811,7 +850,7 @@ func handle_sword(delta):
 		current_sword_cooldown = max(0, current_sword_cooldown - delta)
 	if current_side_bounce_duration > 0:
 		current_side_bounce_duration = max(0, current_side_bounce_duration - delta)
-		velocity.x = side_bounce_speed if side_bounce_direction == RIGHT else -side_bounce_speed
+		velocity.x = side_bounce_speed if side_bounce_direction == DIR.RIGHT else -side_bounce_speed
 	
 	if Input.is_action_just_pressed("button_shoot") && current_sword_cooldown == 0:
 		current_sword_duration = sword_duration;
@@ -826,7 +865,9 @@ func handle_sword(delta):
 			sword_node = $Sword/Right
 		else:
 			sword_node = $Sword/Right if xscale else $Sword/Left;
-		sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", false);
+		
+		if has_item(ITEMS.SWORD_BOUNCE):
+			sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", false);
 	
 	if current_sword_duration > 0:
 		sword_node.modulate.a = current_sword_duration / sword_duration;
@@ -835,17 +876,18 @@ func handle_sword(delta):
 		sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
 
 func _on_bounce():
+	# don't bounce twice in 1 swing
 	sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
 	
 
 func _on_right_sword_bounce(body: Node2D) -> void:
-	side_bounce_direction = LEFT
+	side_bounce_direction = DIR.LEFT
 	current_side_bounce_duration = side_bounce_duration
 	_on_bounce()
 
 
 func _on_left_sword_bounce(body: Node2D) -> void:
-	side_bounce_direction = RIGHT
+	side_bounce_direction = DIR.RIGHT
 	current_side_bounce_duration = side_bounce_duration
 	_on_bounce()
 

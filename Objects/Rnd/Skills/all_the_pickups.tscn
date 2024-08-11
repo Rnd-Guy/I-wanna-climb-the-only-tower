@@ -1,0 +1,96 @@
+[gd_scene load_steps=3 format=3 uid="uid://ct08ke3aillve"]
+
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="1_q21we"]
+[ext_resource type="PackedScene" uid="uid://c363rig7brl0p" path="res://Objects/Gimmicks/objMovingPlatform.tscn" id="2_7c8kv"]
+
+[node name="allThePickups" type="Node2D"]
+
+[node name="SkillPickup" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(-128, -64)
+item = 0
+
+[node name="SkillPickup2" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(0, -64)
+item = 1
+
+[node name="SkillPickup3" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(256, -64)
+item = 3
+
+[node name="SkillPickup13" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(128, -64)
+
+[node name="SkillPickup4" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(-128, -128)
+item = 3
+
+[node name="SkillPickup7" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(-128, -192)
+item = 6
+
+[node name="SkillPickup9" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(-128, -256)
+item = 8
+
+[node name="SkillPickup11" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(-128, -320)
+item = 10
+
+[node name="SkillPickup12" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(0, -320)
+item = 11
+
+[node name="SkillPickup10" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(0, -256)
+item = 9
+
+[node name="SkillPickup8" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(0, -192)
+item = 7
+
+[node name="SkillPickup5" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(0, -128)
+item = 4
+
+[node name="SkillPickup6" parent="." instance=ExtResource("1_q21we")]
+position = Vector2(128, -128)
+item = 5
+
+[node name="objMovingPlatform" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(-128, -56)
+
+[node name="objMovingPlatform2" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(-128, -120)
+
+[node name="objMovingPlatform3" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(-128, -184)
+
+[node name="objMovingPlatform4" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(-128, -248)
+
+[node name="objMovingPlatform5" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(-128, -312)
+
+[node name="objMovingPlatform6" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(0, -312)
+
+[node name="objMovingPlatform7" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(0, -248)
+
+[node name="objMovingPlatform8" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(0, -184)
+
+[node name="objMovingPlatform9" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(0, -120)
+
+[node name="objMovingPlatform10" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(0, -56)
+
+[node name="objMovingPlatform11" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(128, -56)
+
+[node name="objMovingPlatform13" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(256, -56)
+
+[node name="objMovingPlatform12" parent="." instance=ExtResource("2_7c8kv")]
+position = Vector2(128, -120)

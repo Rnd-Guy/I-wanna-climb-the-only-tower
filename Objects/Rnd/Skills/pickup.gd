@@ -7,7 +7,8 @@ var pickupable = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	if not Engine.is_editor_hint():
+		$EditorNode/Label.text = RND.ITEMS.find_key(item)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

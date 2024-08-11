@@ -1,18 +1,18 @@
 [gd_scene load_steps=14 format=4 uid="uid://d2hc8cnstftf"]
 
-[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_co1uj"]
-[ext_resource type="PackedScene" uid="uid://bm40t36a6m8sc" path="res://Objects/Tiles/til32x32.tscn" id="2_dj5jn"]
-[ext_resource type="Texture2D" uid="uid://ce764rqb8dydy" path="res://Graphics/Tiles/tilAllTiles.png" id="3_82uxd"]
-[ext_resource type="Texture2D" uid="uid://dw4a6bqoh6dd8" path="res://Graphics/Tiles/tilSlopes.png" id="4_8g3li"]
-[ext_resource type="PackedScene" uid="uid://yab7pya0yr1j" path="res://Objects/Room_objects/objCameraFixed.tscn" id="5_56h78"]
-[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="6_dvpyv"]
-[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="7_20hxy"]
-[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_f58xy"]
-[ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="9_h3xkj"]
-[ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="9_rwxdl"]
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_7ales"]
+[ext_resource type="PackedScene" uid="uid://bm40t36a6m8sc" path="res://Objects/Tiles/til32x32.tscn" id="2_xjht1"]
+[ext_resource type="Texture2D" uid="uid://ce764rqb8dydy" path="res://Graphics/Tiles/tilAllTiles.png" id="3_0nuar"]
+[ext_resource type="Texture2D" uid="uid://dw4a6bqoh6dd8" path="res://Graphics/Tiles/tilSlopes.png" id="4_o5tox"]
+[ext_resource type="PackedScene" uid="uid://yab7pya0yr1j" path="res://Objects/Room_objects/objCameraFixed.tscn" id="5_r65vn"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="6_rck7b"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="7_ji4sb"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_ry8f1"]
+[ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="9_trjpe"]
+[ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="10_cq7af"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ektps"]
-texture = ExtResource("3_82uxd")
+texture = ExtResource("3_0nuar")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
@@ -47,7 +47,7 @@ texture_region_size = Vector2i(32, 32)
 3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1rc4p"]
-texture = ExtResource("4_8g3li")
+texture = ExtResource("4_o5tox")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, -16, 16, 16, -16, 16)
@@ -69,10 +69,10 @@ sources/1 = SubResource("TileSetAtlasSource_1rc4p")
 
 [node name="Environment" type="Node2D" parent="."]
 
-[node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_co1uj")]
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_7ales")]
 position = Vector2(-16, 16)
 
-[node name="til32x32" parent="Environment" instance=ExtResource("2_dj5jn")]
+[node name="til32x32" parent="Environment" instance=ExtResource("2_xjht1")]
 tile_set = SubResource("TileSet_3k4r6")
 rendering_quadrant_size = 32
 
@@ -84,11 +84,11 @@ rendering_quadrant_size = 32
 
 [node name="Room_related" type="Node2D" parent="."]
 
-[node name="objCameraFixed" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("5_56h78")]
+[node name="objCameraFixed" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("5_r65vn")]
 position = Vector2(-16, 48)
 target_node = NodePath("../objPlayer")
 
-[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("7_20hxy")]
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("6_rck7b")]
 position = Vector2(-16, 48)
 target_node = NodePath("../objPlayer")
 stop_left_at = 0
@@ -96,36 +96,44 @@ stop_up_at = 0
 stop_right_at = 800
 stop_down_at = 1216
 
-[node name="objPlayer" parent="Room_related" instance=ExtResource("6_dvpyv")]
+[node name="objPlayer" parent="Room_related" instance=ExtResource("7_ji4sb")]
 position = Vector2(682, 515)
 
-[node name="SkillPickup2" parent="Room_related" instance=ExtResource("8_f58xy")]
+[node name="SkillPickup2" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(280, 544)
 item = 7
 
-[node name="SkillPickup" parent="Room_related" instance=ExtResource("8_f58xy")]
+[node name="SkillPickup" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(152, 536)
 
-[node name="SkillPickup3" parent="Room_related" instance=ExtResource("8_f58xy")]
+[node name="SkillPickup3" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(368, 544)
 item = 6
 
-[node name="SkillPickup4" parent="Room_related" instance=ExtResource("8_f58xy")]
+[node name="SkillPickup4" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(704, 536)
+item = 5
+
+[node name="SkillPickup6" parent="Room_related" instance=ExtResource("8_ry8f1")]
+position = Vector2(511, 344)
+item = 6
+
+[node name="SkillPickup7" parent="Room_related" instance=ExtResource("8_ry8f1")]
+position = Vector2(402, 382)
 item = 4
 
-[node name="SkillPickup5" parent="Room_related" instance=ExtResource("8_f58xy")]
-position = Vector2(640, 512)
+[node name="SkillPickup5" parent="Room_related" instance=ExtResource("8_ry8f1")]
+position = Vector2(640, 506)
 item = 3
 
 [node name="Gimmicks" type="Node2D" parent="."]
 
 [node name="Hazards" type="Node2D" parent="."]
 
-[node name="Spike16Layer" parent="Hazards" instance=ExtResource("9_rwxdl")]
+[node name="Spike16Layer" parent="Hazards" instance=ExtResource("9_trjpe")]
 tile_map_data = PackedByteArray("AAAuAB4AAAABAAAAAAAvABwAAQAAAAEAAAAvABkAAQAAAAEAAAAvABYAAQAAAAEAAAA=")
 
 [node name="Trigger_related" type="Node2D" parent="."]
 
-[node name="WeaponUi" parent="." instance=ExtResource("9_h3xkj")]
+[node name="WeaponUi" parent="." instance=ExtResource("10_cq7af")]
 unique_name_in_owner = true

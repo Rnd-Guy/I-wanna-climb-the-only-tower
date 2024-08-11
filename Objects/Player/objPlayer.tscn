@@ -270,6 +270,7 @@ debug_color = Color(1, 0.00784314, 0.0509804, 0.419608)
 [node name="Sword" type="Node2D" parent="."]
 
 [node name="Right" type="Sprite2D" parent="Sword"]
+visible = false
 position = Vector2(48, 8)
 texture = ExtResource("7_ouvco")
 
@@ -283,6 +284,7 @@ shape = SubResource("RectangleShape2D_6p85w")
 disabled = true
 
 [node name="Left" type="Sprite2D" parent="Sword"]
+visible = false
 position = Vector2(-48, 8)
 scale = Vector2(-1, -1)
 texture = ExtResource("7_ouvco")
@@ -297,6 +299,7 @@ shape = SubResource("RectangleShape2D_6p85w")
 disabled = true
 
 [node name="Down" type="Sprite2D" parent="Sword"]
+visible = false
 position = Vector2(0, 56)
 rotation = 1.5708
 texture = ExtResource("7_ouvco")
@@ -311,6 +314,7 @@ shape = SubResource("RectangleShape2D_2pkp3")
 disabled = true
 
 [node name="Up" type="Sprite2D" parent="Sword"]
+visible = false
 position = Vector2(0, -40)
 rotation = 4.71239
 texture = ExtResource("7_ouvco")

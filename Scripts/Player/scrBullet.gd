@@ -1,6 +1,8 @@
 extends AnimatableBody2D
 
-var looking_at: int
+var DIR := RND.DIR
+
+var looking_at := DIR.RIGHT
 var bullet_direction: Vector2 = Vector2.ZERO
 var bullet_speed: int = 12
 var is_moving: bool = true
@@ -14,10 +16,14 @@ var attack_damage: int = GLOBAL_GAME.player_bullet_damage
 # objPlayer, on _handle_shooting(). Once we get the direction we want, we add
 # the proper speed to bullet_direction's x
 func _ready():
-	if (looking_at == 1):
+	if (looking_at == DIR.RIGHT):
 		bullet_direction.x = bullet_speed 
-	elif (looking_at == -1):
+	elif (looking_at == DIR.LEFT):
 		bullet_direction.x = -bullet_speed
+	elif looking_at == DIR.UP:
+		bullet_direction.y = -bullet_speed
+	elif looking_at == DIR.DOWN:
+		bullet_direction.y = bullet_speed
 
 func _physics_process(_delta):
 	
