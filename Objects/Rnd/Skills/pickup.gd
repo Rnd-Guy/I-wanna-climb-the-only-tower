@@ -2,6 +2,7 @@
 extends Node2D
 
 @export var item := RND.ITEMS.FILLER;
+@export var hint := "Someone forgot to code a hint :c  Looks like you still need something though!"
 
 var pickupable = false
 
@@ -19,10 +20,19 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
-		if Input.is_action_just_pressed("button_up") && pickupable:
-			GLOBAL_INSTANCES.objPlayerID.pickup_item(item);
-			RND.item_pickup.emit(item);
-			queue_free()
+		var player = GLOBAL_INSTANCES.objPlayerID
+		
+		if is_instance_valid(player):
+			if player.has_item(item):
+				queue_free()
+			
+			elif Input.is_action_just_pressed("button_up") && pickupable:
+				GLOBAL_INSTANCES.objPlayerID.pickup_item(item);
+				RND.item_pickup.emit(item);
+				GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndPickup)
+				GLOBAL_SAVELOAD.save_game(true)
+				queue_free()
+		
 			
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

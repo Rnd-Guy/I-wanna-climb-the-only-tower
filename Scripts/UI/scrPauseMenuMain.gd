@@ -6,8 +6,8 @@ extends Control
 
 var items_menu := preload("res://Objects/UI/objPauseMenuItems.tscn")
 var button_color_unfocused: Color = Color(0, 0, 0)
-var music_volume: float = 1.0
-var sound_volume: float = 1.0
+var music_volume: float = 1
+var sound_volume: float = 1
 var volume_step: float = 0.1
 
 
@@ -35,7 +35,8 @@ func _ready():
 	
 	# Sets focus to the first option (we do this after setting the button's
 	# colors. Otherwise, the focus color will get overwritten)
-	$CanvasLayer/VBoxContainer/OptionsContainer/ItemsMenu.grab_focus()
+	$CanvasLayer/VBoxContainer/OptionsContainer/MusicVolume.grab_focus()
+
 
 
 # Goes back to the main menu room if "button_shoot" is pressed
@@ -102,7 +103,7 @@ func _on_resume_game_pressed():
 
 # Updates text labels to show the proper key ids
 func set_labels_text():
-	$CanvasLayer/VBoxContainer/OptionsContainer/ItemsMenu/Label.text = "View Items"
+	#$CanvasLayer/VBoxContainer/OptionsContainer/ItemsMenu/Label.text = "View Items"
 	$CanvasLayer/VBoxContainer/OptionsContainer/MusicVolume/Label.text = "Music Volume: " + str(round(music_volume * 100)) + "%"
 	$CanvasLayer/VBoxContainer/OptionsContainer/SoundVolume/Label.text = "Sound Volume: " + str(round(sound_volume * 100)) + "%"
 	$CanvasLayer/VBoxContainer/OptionsContainer/QuitToMenu/Label.text = "Quit to Main Menu"

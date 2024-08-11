@@ -102,29 +102,36 @@ position = Vector2(682, 515)
 [node name="SkillPickup2" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(280, 544)
 item = 7
+hint = null
 
 [node name="SkillPickup" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(152, 536)
+hint = null
 
 [node name="SkillPickup3" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(368, 544)
 item = 6
+hint = null
 
 [node name="SkillPickup4" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(704, 536)
 item = 5
+hint = null
 
 [node name="SkillPickup6" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(511, 344)
 item = 6
+hint = null
 
 [node name="SkillPickup7" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(402, 382)
 item = 4
+hint = null
 
 [node name="SkillPickup5" parent="Room_related" instance=ExtResource("8_ry8f1")]
 position = Vector2(640, 506)
 item = 3
+hint = null
 
 [node name="Gimmicks" type="Node2D" parent="."]
 

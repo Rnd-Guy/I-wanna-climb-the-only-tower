@@ -22,6 +22,12 @@ const sndBouncyBlock = preload("res://Audio/Sounds/sndBouncyBlock.wav")
 const sndSpikeBlock = preload("res://Audio/Sounds/sndSpikeBlock.wav")
 const sndFadingBlock = preload("res://Audio/Sounds/sndFadingBlock.wav")
 
+# rnd
+const sndSword = preload("res://Audio/Sounds/sword.wav")
+const sndSwordBounce = preload("res://Audio/Sounds/bounce.wav")
+const sndDash = preload("res://Audio/Sounds/dash.wav")
+const sndPickup = preload("res://Audio/Sounds/pickup.wav")
+
 # We get the audioPlayerList node from this variable. A little cleaner
 @onready var audioPlayers: Node = $audioPlayerList
 

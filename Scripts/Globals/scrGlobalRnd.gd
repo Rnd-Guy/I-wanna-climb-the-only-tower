@@ -18,6 +18,14 @@ enum ITEMS {
 	
 	KEY,
 	FILLER,
+	
+	DAY_1_STAR,
+	DAY_2_STAR,
+	DAY_3_STAR,
+	DAY_4_STAR,
+	DAY_5_STAR,
+	DAY_6_STAR,
+	DAY_7_STAR,
 }
 
 enum DIR {

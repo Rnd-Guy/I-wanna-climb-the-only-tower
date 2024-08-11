@@ -24,7 +24,6 @@ position = Vector2(0, -18)
 polygon = PackedVector2Array(-2, -18, -2, -18, -2, -12, 2, -12, 2, -18, 5, -18, 0, -26, -5, -18)
 
 [node name="EditorNode" parent="." instance=ExtResource("3_bsg3q")]
-invisible_in_game = false
 metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="EditorNode"]

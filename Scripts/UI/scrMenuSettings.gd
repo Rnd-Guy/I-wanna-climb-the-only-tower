@@ -265,6 +265,3 @@ func set_camera_anchor_positions():
 	for settings_container_nodes in $SettingsContainer.get_children():
 		if settings_container_nodes.has_focus():
 			camera_anchor_node.position.y = settings_container_nodes.position.y
-
-
-

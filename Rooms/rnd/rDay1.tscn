@@ -1,21 +1,33 @@
-[gd_scene load_steps=8 format=3 uid="uid://roem40xx8spe"]
+[gd_scene load_steps=10 format=3 uid="uid://roem40xx8spe"]
 
 [ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_sn0yt"]
+[ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_wok7n"]
 [ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="2_4wqef"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="3_6x487"]
 [ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="4_wrcd3"]
 [ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="5_pv4n1"]
 [ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="6_othd3"]
-[ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="7_inwk5"]
-[ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="8_8bit2"]
+[ext_resource type="PackedScene" uid="uid://mnklt76bdhlw" path="res://Objects/Rnd/room/hint_sign.tscn" id="8_yhfm2"]
+[ext_resource type="PackedScene" uid="uid://cu54hxafh2i6t" path="res://Objects/Room_objects/objSignProximity.tscn" id="9_5ab7r"]
 
 [node name="rTemplate" type="Node2D"]
+
+[node name="DaySetup" parent="." instance=ExtResource("1_wok7n")]
+starting_items = Array[int]([0, 1, 4])
+day_name = "World 1: The kid's world"
+
+[node name="HintSign" parent="." node_paths=PackedStringArray("order") instance=ExtResource("8_yhfm2")]
+position = Vector2(168, -16)
+order = [NodePath("../Room_related/pickups/Lake"), NodePath("../Room_related/pickups/Cave"), NodePath("../Room_related/pickups/NearIsland"), NodePath("../Room_related/pickups/SpikeTower")]
 
 [node name="Environment" type="Node2D" parent="."]
 
 [node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_sn0yt")]
 position = Vector2(-16, 16)
+song_id = ExtResource("3_6x487")
 
 [node name="Node2D" parent="Environment" instance=ExtResource("2_4wqef")]
+warp_to = "res://Rooms/rnd/rDay2.tscn"
 
 [node name="Room_related" type="Node2D" parent="."]
 
@@ -28,43 +40,44 @@ stop_right_at = 2000
 stop_down_at = 2000
 
 [node name="objPlayer" parent="Room_related" instance=ExtResource("5_pv4n1")]
-position = Vector2(-709, 421)
+position = Vector2(0, -16)
 
-[node name="SkillPickup2" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(-412, 392)
-item = 7
+[node name="pickups" type="Node2D" parent="Room_related"]
 
-[node name="SkillPickup" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(152, 536)
+[node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("6_othd3")]
+position = Vector2(-1168, 448)
+hint = "There's an island nearby on the left with something in it"
 
-[node name="SkillPickup3" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(-615, 594)
-item = 6
+[node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("6_othd3")]
+position = Vector2(-2240, 448)
+item = 13
+hint = "There's an even further island far to the left!"
 
-[node name="SkillPickup4" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(-655, 438)
-item = 5
+[node name="Cave" parent="Room_related/pickups" instance=ExtResource("6_othd3")]
+position = Vector2(168, 800)
+item = 10
+hint = "A low effort maze lies below us. Maybe it'll be a bit more threatening later."
 
-[node name="SkillPickup6" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(-768, 432)
-item = 6
+[node name="Lake" parent="Room_related/pickups" instance=ExtResource("6_othd3")]
+position = Vector2(256, 1376)
+item = 9
+hint = "Buried treasure deep below"
 
-[node name="SkillPickup7" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(402, 382)
-item = 4
-
-[node name="SkillPickup5" parent="Room_related" instance=ExtResource("6_othd3")]
-position = Vector2(-475, 338)
-item = 3
+[node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("6_othd3")]
+position = Vector2(1256, -64)
+item = 11
+hint = "The spike tower might be keeping something safe"
 
 [node name="Gimmicks" type="Node2D" parent="."]
 
 [node name="Hazards" type="Node2D" parent="."]
 
-[node name="Spike16Layer" parent="Hazards" instance=ExtResource("7_inwk5")]
-tile_map_data = PackedByteArray(0, 0, 46, 0, 30, 0, 0, 0, 1, 0, 0, 0, 0, 0, 47, 0, 28, 0, 1, 0, 0, 0, 1, 0, 0, 0, 47, 0, 25, 0, 1, 0, 0, 0, 1, 0, 0, 0, 47, 0, 22, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-
 [node name="Trigger_related" type="Node2D" parent="."]
 
-[node name="WeaponUi" parent="." instance=ExtResource("8_8bit2")]
-unique_name_in_owner = true
+[node name="objSignProximity" parent="." instance=ExtResource("9_5ab7r")]
+position = Vector2(488, 784)
+sign_text = "Hold R to return to the starting location! Progress is saved automatically"
+
+[node name="objSignProximity2" parent="." instance=ExtResource("9_5ab7r")]
+position = Vector2(-720, 432)
+sign_text = "Press X to dash if you have it!"

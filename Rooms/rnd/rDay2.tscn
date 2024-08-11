@@ -1,0 +1,65 @@
+[gd_scene load_steps=8 format=3 uid="uid://cdtdkhg4lm8yd"]
+
+[ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_k4dgm"]
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="2_lainw"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="3_8k7y2"]
+[ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="4_nylwj"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="5_xpobl"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="6_b5bgs"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="7_3ydpi"]
+
+[node name="rTemplate" type="Node2D"]
+
+[node name="DaySetup" parent="." instance=ExtResource("1_k4dgm")]
+starting_items = Array[int]([0, 7])
+day = 2
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("2_lainw")]
+position = Vector2(-16, 16)
+song_id = ExtResource("3_8k7y2")
+
+[node name="room" parent="Environment" instance=ExtResource("4_nylwj")]
+warp_to = "res://Rooms/rnd/rGG.tscn"
+
+[node name="Room_related" type="Node2D" parent="."]
+
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("5_xpobl")]
+position = Vector2(-16, 48)
+target_node = NodePath("../objPlayer")
+stop_left_at = -2000
+stop_up_at = -2000
+stop_right_at = 2000
+stop_down_at = 2000
+
+[node name="objPlayer" parent="Room_related" instance=ExtResource("6_b5bgs")]
+position = Vector2(0, -16)
+
+[node name="pickups" type="Node2D" parent="Room_related"]
+
+[node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(-1168, 448)
+hint = null
+
+[node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(-2240, 448)
+hint = null
+
+[node name="Cave" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(368, 800)
+hint = null
+
+[node name="TestItem" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(128, 0)
+hint = null
+
+[node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(1256, -64)
+hint = null
+
+[node name="Gimmicks" type="Node2D" parent="."]
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Trigger_related" type="Node2D" parent="."]

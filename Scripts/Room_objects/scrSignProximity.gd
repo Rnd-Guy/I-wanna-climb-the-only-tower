@@ -22,6 +22,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
+	text_label.text = sign_text
 	if not Engine.is_editor_hint():
 		
 		# Enables and disables visuals and functions if outside of view
@@ -38,8 +39,8 @@ func _physics_process(_delta):
 					text_alpha -= alpha_amount * 2
 			
 			text_label.self_modulate = Color(1.0, 1.0, 1.0, text_alpha)
-	else:
-		text_label.text = sign_text
+	#else:
+	#	text_label.text = sign_text
 
 
 

@@ -46,7 +46,8 @@ func _ready():
 	if GLOBAL_GAME.debug_hitbox:
 		$playerMask/ColorRect.visible = GLOBAL_GAME.debug_hitbox
 	
-	set_initial_items(default_items)
+	#set_initial_items(default_items)
+	#load_items()
 
 
 """
@@ -587,8 +588,7 @@ func _on_sheep_blocks_body_entered(body):
 var ITEMS := RND.ITEMS;
 var DIR := RND.DIR;
 
-var permanent_items = []
-var temporary_items = []
+var items = []
 
 var max_djumps = 0;
 var djumps = 0;
@@ -609,7 +609,7 @@ var wall_jump_direction := DIR.LEFT;
 var just_walljumped = false;
 
 var weapon = null;
-var weapons = [ITEMS.GUN]
+var weapons = []
 
 @onready var sword_node = $Sword/Right;
 var sword_duration = 0.2;
@@ -641,11 +641,14 @@ var current_death_timer = 0
 var dead = false;
 var goaled = false;
 
+var autosave_frames = 60;
+var current_autosave_frames = 0;
+
 # proper
 #var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
 
 # testing
-var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP]
+#var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP]
 
 signal player_item_change
 
@@ -678,32 +681,34 @@ func pickup_item(item):
 		ITEMS.GUN_INFINITE_AMMO:
 			bullets = 99999999
 	
-	temporary_items.append(item);
+	items.append(item);
 	player_item_change.emit()
 
 func has_item(item):
-	return permanent_items.has(item) || temporary_items.has(item);
+	return items.has(item)
 
-func store_items():
-	permanent_items.append_array(temporary_items);
-	temporary_items.clear()
+#func store_items():
+	#permanent_items.append_array(temporary_items);
+	#temporary_items.clear()
 
-func reset_items():
-	temporary_items.clear()
-	player_item_change.emit()
+#func reset_items():
+	#temporary_items.clear()
+	#player_item_change.emit()
+func load_items():
+	set_initial_items(GLOBAL_SAVELOAD.variableGameData.items)
 
-func set_initial_items(items):
-	permanent_items.clear()
-	temporary_items.clear()
+func set_initial_items(initial_items):
+	items.clear()
 	set_initial_state()
-	for item in items:
+	for item in initial_items:
 		pickup_item(item);
-	store_items();
+	GLOBAL_SAVELOAD.save_game(true)
+	#store_items();
 
 func get_all_items():
-	var items = [];
-	items.append_array(permanent_items)
-	items.append_array(temporary_items)
+	#var items = [];
+	#items.append_array(permanent_items)
+	#items.append_array(temporary_items)
 	return items;
 
 func set_initial_state():
@@ -751,6 +756,7 @@ func handle_dash(delta):
 	if has_item(ITEMS.DASH) && Input.is_action_just_pressed("button_dash") && can_dash && current_dash_cooldown == 0:
 		current_dash_duration = dash_duration;
 		current_dash_cooldown = dash_cooldown;
+		GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndDash)
 		can_dash = false
 		if Input.is_action_pressed("button_left"):
 			dash_direction = DIR.LEFT
@@ -941,6 +947,7 @@ func handle_sword(delta):
 	if Input.is_action_just_pressed("button_shoot") && current_sword_cooldown == 0:
 		current_sword_duration = sword_duration;
 		current_sword_cooldown = sword_cooldown;
+		GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndSword)
 		if Input.is_action_pressed("button_down"):
 			sword_node = $Sword/Down
 		elif Input.is_action_pressed("button_up"):
@@ -964,6 +971,7 @@ func handle_sword(delta):
 func _on_bounce():
 	# don't bounce twice in 1 swing
 	sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
+	GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndSwordBounce)
 	
 
 func _on_right_sword_bounce(body: Node2D) -> void:
@@ -999,6 +1007,13 @@ func handle_safe_spot():
 		if potential_safe_spot != null:
 			last_safe_spot = potential_safe_spot
 		potential_safe_spot = position;
+		current_autosave_frames += 1
+		if current_autosave_frames >= autosave_frames:
+			# move to the known safe spot first so the save will take these coords
+			position = last_safe_spot
+			GLOBAL_SAVELOAD.save_game(true)
+			position = potential_safe_spot
+			current_autosave_frames = 0
 	else:
 		potential_safe_spot = null
 

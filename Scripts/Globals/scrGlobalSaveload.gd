@@ -17,20 +17,22 @@ const SCREENSHOT_WIDTH: int = 192
 const SCREENSHOT_HEIGHT: int = 160
 
 # This is the default data, for creating new files
-var defaultGameData = {
+const defaultGameData = {
 	"first_time_saving" : true,
 	"player_x" : 0,
 	"player_y" : 0,
 	"player_sprite_flipped" : false,
 	"room_name" : "",
 	"total_time" : 0.0,
-	"total_deaths" : 0
+	"total_deaths" : 0,
+	"items": [],
+	"day_setup": 0,
 }
 
 # This is the data we can read and write. By default, it's just a copy of
 # the default game data dictionary, but we will modify this later on, and
 # then we'll read from those existing files.
-var variableGameData = defaultGameData
+var variableGameData = defaultGameData.duplicate(true)
 
 # Dictionary for items and collectables. Empty by default
 var itemsGameData = {}
@@ -95,7 +97,7 @@ func save_default_data():
 	# don't load, go back to the menu and then select another file without a 
 	# previous save. It's a way to make sure variableGameData is "empty" by
 	# default when starting a new file
-	variableGameData = defaultGameData
+	variableGameData = defaultGameData.duplicate(true)
 	
 	# Closes file, freeing it from memory
 	file = null 
@@ -126,11 +128,13 @@ func take_screenshot() -> void:
 # Saves the player's coordinates, sprite state and room name. Also takes a
 # screenshot. This is what you use for saving the game normally
 func save_game(save_position = true) -> void:
-	if is_instance_valid(GLOBAL_INSTANCES.objPlayerID) && save_position:
-		variableGameData.player_x = GLOBAL_INSTANCES.objPlayerID.position.x
-		variableGameData.player_y = GLOBAL_INSTANCES.objPlayerID.position.y
-		variableGameData.player_sprite_flipped = GLOBAL_INSTANCES.objPlayerID.xscale
+	var player = GLOBAL_INSTANCES.objPlayerID
+	if is_instance_valid(player) && save_position:
+		variableGameData.player_x = player.position.x
+		variableGameData.player_y = player.position.y
+		variableGameData.player_sprite_flipped = player.xscale
 		variableGameData.room_name = get_tree().get_current_scene().get_scene_file_path()
+		variableGameData.items = player.items
 		merge_items_data()
 		take_screenshot()
 	variableGameData.total_time = GLOBAL_GAME.time

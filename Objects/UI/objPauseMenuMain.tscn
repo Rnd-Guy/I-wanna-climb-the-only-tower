@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6e8hsgoxslt3"]
+[gd_scene load_steps=5 format=3 uid="uid://c6e8hsgoxslt3"]
 
 [ext_resource type="Script" path="res://Scripts/UI/scrPauseMenuMain.gd" id="1_l70pg"]
 [ext_resource type="FontFile" uid="uid://4m283seugry" path="res://Graphics/Fonts/NFPixels-Regular.otf" id="2_3paqw"]
 [ext_resource type="PackedScene" uid="uid://614aveijpptq" path="res://Objects/UI/objMenuButton.tscn" id="3_6y6sc"]
+[ext_resource type="PackedScene" uid="uid://dixmbu7c86cil" path="res://Objects/Rnd/room/banner.tscn" id="4_4c4cq"]
 
 [node name="objPauseMenuMain" type="Control" groups=["Pause"]]
 process_mode = 3
@@ -51,18 +52,10 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 60
 
-[node name="ItemsMenu" parent="CanvasLayer/VBoxContainer/OptionsContainer" instance=ExtResource("3_6y6sc")]
-layout_mode = 2
-focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../ResumeGame")
-focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../MusicVolume")
-action_mode = 0
-
 [node name="MusicVolume" parent="CanvasLayer/VBoxContainer/OptionsContainer" instance=ExtResource("3_6y6sc")]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../ItemsMenu")
+focus_neighbor_top = NodePath("../ResumeGame")
 focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../SoundVolume")
 action_mode = 0
@@ -88,9 +81,10 @@ layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../QuitToMenu")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../ItemsMenu")
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/OptionsContainer/ItemsMenu" to="." method="_on_items_menu_pressed"]
+[node name="banner" parent="." instance=ExtResource("4_4c4cq")]
+position = Vector2(402, 67)
+
 [connection signal="gui_input" from="CanvasLayer/VBoxContainer/OptionsContainer/MusicVolume" to="." method="_on_music_volume_gui_input"]
 [connection signal="gui_input" from="CanvasLayer/VBoxContainer/OptionsContainer/SoundVolume" to="." method="_on_sound_volume_gui_input"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/OptionsContainer/QuitToMenu" to="." method="_on_quit_to_menu_pressed"]

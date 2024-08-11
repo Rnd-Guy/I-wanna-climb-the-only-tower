@@ -3,8 +3,8 @@ extends Node
 const DATA_PATH := "user://Data/Settings.cfg"
 
 #const SAVE_PASSWORD_STRING := "Change me!"
-var MUSIC_VOLUME: float = 1.0
-var SOUND_VOLUME: float = 1.0
+var MUSIC_VOLUME: float = 0.5
+var SOUND_VOLUME: float = 0.5
 var FULLSCREEN: bool = false
 var ZOOM_SCALING: float = 1.0
 var HUD_SCALING: float = 1.0
@@ -14,8 +14,8 @@ var AUTORESET: bool = false
 var EXTRA_KEYS: bool = false
 
 # Default values, for when you need to reset them from the settings menu
-const DEFAULT_MUSIC_VOLUME: float = 1.0
-const DEFAULT_SOUND_VOLUME: float = 1.0
+const DEFAULT_MUSIC_VOLUME: float = 0.5
+const DEFAULT_SOUND_VOLUME: float = 0.5
 const DEFAULT_FULLSCREEN: bool = false
 const DEFAULT_ZOOM_SCALING: float = 1.0
 const DEFAULT_HUD_SCALING: float = 1.0

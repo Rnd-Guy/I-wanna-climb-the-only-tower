@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="GameJam0824"
+config/name="I wanna climb the only tower"
 config/tags=PackedStringArray("fangame_engine")
 run/main_scene="res://Rooms/00_Title_and_menus/rTitle.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
@@ -43,7 +43,6 @@ file_logging/enable_file_logging.pc=false
 
 window/size/viewport_width=800
 window/size/viewport_height=608
-window/size/resizable=false
 window/stretch/mode="viewport"
 
 [file_customization]
@@ -241,3 +240,4 @@ button_switch_weapon={
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.495956, 0.661029, 0.936801, 1)

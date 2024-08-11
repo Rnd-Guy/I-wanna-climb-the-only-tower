@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://di4v5spvv4k2v"]
+[gd_scene load_steps=9 format=3 uid="uid://di4v5spvv4k2v"]
 
 [ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_7tc2t"]
 [ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="2_ujodv"]
 [ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="3_8ts50"]
 [ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="4_00rl0"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="4_2gf6x"]
 [ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="5_e6ohy"]
 [ext_resource type="PackedScene" uid="uid://ct08ke3aillve" path="res://Objects/Rnd/Skills/all_the_pickups.tscn" id="6_kiynp"]
 [ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="6_us4tq"]
@@ -22,6 +23,7 @@ position = Vector2(-154, -845)
 
 [node name="objMusicPlayer" parent="Environment" instance=ExtResource("1_7tc2t")]
 position = Vector2(-16, 16)
+song_id = ExtResource("4_2gf6x")
 
 [node name="room" parent="Environment" instance=ExtResource("2_ujodv")]
 warp_to = "res://Rooms/rnd/rDay1.tscn"

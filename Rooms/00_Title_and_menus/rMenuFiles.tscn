@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_27c2k")
-starting_room = "res://Rooms/01_Testing_rooms/rRoomSelection.tscn"
+starting_room = "res://Rooms/rnd/rDay1.tscn"
 main_menu = "res://Rooms/00_Title_and_menus/rMenuMain.tscn"
 metadata/_edit_lock_ = true
 

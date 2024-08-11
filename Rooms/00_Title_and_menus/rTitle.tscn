@@ -252,10 +252,41 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 13
 theme_override_fonts/font = ExtResource("1_jst16")
 theme_override_font_sizes/font_size = 60
-text = "Title Screen Example!"
+text = "I wanna climb the only tower"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
+
+[node name="Label3" type="Label" parent="Visuals"]
+visible = false
+z_index = 1
+offset_left = 108.0
+offset_top = 136.0
+offset_right = 908.0
+offset_bottom = 584.0
+scale = Vector2(0.667418, 0.647766)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 13
+theme_override_fonts/font = ExtResource("1_jst16")
+theme_override_font_sizes/font_size = 60
+text = "(Disclaimer - not actually a rando)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="Visuals"]
+z_index = 1
+offset_left = 125.0
+offset_top = 203.0
+offset_right = 1307.0
+offset_bottom = 651.0
+scale = Vector2(0.46218, 0.425359)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 13
+theme_override_fonts/font = ExtResource("1_jst16")
+theme_override_font_sizes/font_size = 60
+text = "TODO: change title screen from engine default"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PressAnyKey" type="Node2D" parent="."]
 visible = false

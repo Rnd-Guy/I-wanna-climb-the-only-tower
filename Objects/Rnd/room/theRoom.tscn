@@ -1,17 +1,16 @@
-[gd_scene load_steps=18 format=4 uid="uid://diqydqyaklqwn"]
+[gd_scene load_steps=17 format=4 uid="uid://diqydqyaklqwn"]
 
 [ext_resource type="Script" path="res://Objects/Rnd/room/the_room.gd" id="1_mr73w"]
 [ext_resource type="PackedScene" uid="uid://du2jugqwm8g0a" path="res://Objects/Tiles/til16.tscn" id="1_ncjbw"]
 [ext_resource type="Texture2D" uid="uid://ce764rqb8dydy" path="res://Graphics/Tiles/tilAllTiles.png" id="1_r5kvd"]
-[ext_resource type="PackedScene" uid="uid://b31w5fm4w5857" path="res://Objects/Room_objects/objSavePoint.tscn" id="2_xv1br"]
 [ext_resource type="Texture2D" uid="uid://dw4a6bqoh6dd8" path="res://Graphics/Tiles/tilSlopes.png" id="2_y20cf"]
 [ext_resource type="Texture2D" uid="uid://mgx6x5nn2vb8" path="res://Graphics/Tilemaps/tilSpikes.png" id="5_u30ni"]
 [ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="6_dyf7k"]
 [ext_resource type="PackedScene" uid="uid://dlwoh08g16ynx" path="res://Objects/Rnd/room/respawn_node.tscn" id="7_7ahpq"]
-[ext_resource type="PackedScene" uid="uid://b03pvv4xibak7" path="res://Objects/Rnd/room/safe_landing.tscn" id="8_xk13q"]
 [ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="9_dtimn"]
 [ext_resource type="PackedScene" uid="uid://dtmvdxwbxu3h6" path="res://Objects/Rnd/room/lock.tscn" id="10_cuqby"]
 [ext_resource type="PackedScene" uid="uid://d1bykg82mlwje" path="res://Objects/Rnd/room/goal.tscn" id="11_64wme"]
+[ext_resource type="PackedScene" uid="uid://vn1i1dbtdo4p" path="res://Objects/Rnd/room/killer_block.tscn" id="11_i4bvj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20by8"]
 texture = ExtResource("1_r5kvd")
@@ -85,7 +84,7 @@ physics_layer_0/collision_layer = 8
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_1s4bh")
 
-[node name="Node2D" type="Node2D"]
+[node name="theRoom" type="Node2D"]
 script = ExtResource("1_mr73w")
 
 [node name="til32" type="TileMapLayer" parent="."]
@@ -95,11 +94,6 @@ tile_set = SubResource("TileSet_5neqq")
 rendering_quadrant_size = 32
 
 [node name="til16" parent="." instance=ExtResource("1_ncjbw")]
-
-[node name="objSavePoint" parent="." instance=ExtResource("2_xv1br")]
-visible = false
-position = Vector2(0.999998, -67)
-scale = Vector2(4.79828, 4.05501)
 
 [node name="spikes32" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -114,14 +108,6 @@ position = Vector2(0, -25)
 
 [node name="SafeSpots" type="Node2D" parent="."]
 
-[node name="SafeLanding" parent="SafeSpots" instance=ExtResource("8_xk13q")]
-position = Vector2(-784, 432)
-scale = Vector2(47, 0.5)
-
-[node name="SafeLanding2" parent="SafeSpots" instance=ExtResource("8_xk13q")]
-position = Vector2(-128, -16)
-scale = Vector2(9.5, 0.7)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="WeaponUi" parent="CanvasLayer" instance=ExtResource("9_dtimn")]
@@ -132,3 +118,29 @@ scale = Vector2(0.5, 1.2)
 
 [node name="goal" parent="." instance=ExtResource("11_64wme")]
 position = Vector2(-352, -1568)
+
+[node name="KillerBlock" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(-2584, 704)
+scale = Vector2(68.9, 1.4)
+
+[node name="KillerBlock6" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(-1000, 304)
+scale = Vector2(7.6, 0.5)
+
+[node name="KillerBlock5" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(-2664, -3288)
+scale = Vector2(143.8, 1.4)
+
+[node name="KillerBlock2" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(960, 728)
+scale = Vector2(68.9, 1.4)
+
+[node name="KillerBlock3" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(-2632, -3243)
+rotation = 1.57079
+scale = Vector2(126.6, -2.3)
+
+[node name="KillerBlock4" parent="." instance=ExtResource("11_i4bvj")]
+position = Vector2(1952, -3256)
+rotation = 1.57079
+scale = Vector2(126, -2.7)
