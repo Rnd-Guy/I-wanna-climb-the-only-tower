@@ -36,4 +36,6 @@ func set_weapon(weapon):
 
 func handle_item_change():
 	set_weapons(GLOBAL_INSTANCES.objPlayerID.get_all_items())
-	set_weapon(GLOBAL_INSTANCES.objPlayerID.weapon);
+	
+	# give time for the hboxcontainer to shift positions first
+	call_deferred("set_weapon", GLOBAL_INSTANCES.objPlayerID.weapon)

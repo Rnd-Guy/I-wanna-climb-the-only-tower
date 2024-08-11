@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bp5rqk4l7tesk"]
+[gd_scene load_steps=33 format=3 uid="uid://bp5rqk4l7tesk"]
 
 [ext_resource type="Script" path="res://Scripts/Player/scrPlayer.gd" id="1_qesj7"]
 [ext_resource type="Texture2D" uid="uid://burygy08cq204" path="res://Graphics/Sprites/Player/sprPlayerFall.png" id="2_vhr1p"]
@@ -169,6 +169,9 @@ size = Vector2(12, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6p85w"]
 size = Vector2(48, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2pkp3"]
+size = Vector2(80, 32)
+
 [node name="objPlayer" type="CharacterBody2D" groups=["Player"]]
 z_index = 2
 collision_mask = 6
@@ -267,13 +270,12 @@ debug_color = Color(1, 0.00784314, 0.0509804, 0.419608)
 [node name="Sword" type="Node2D" parent="."]
 
 [node name="Right" type="Sprite2D" parent="Sword"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(48, 8)
 texture = ExtResource("7_ouvco")
 
 [node name="Area2D" type="Area2D" parent="Sword/Right"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 2056
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Right/Area2D"]
 position = Vector2(-8, 0)
@@ -281,14 +283,13 @@ shape = SubResource("RectangleShape2D_6p85w")
 disabled = true
 
 [node name="Left" type="Sprite2D" parent="Sword"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(-48, 8)
 scale = Vector2(-1, -1)
 texture = ExtResource("7_ouvco")
 
 [node name="Area2D" type="Area2D" parent="Sword/Left"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 2056
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Left/Area2D"]
 position = Vector2(-8, 0)
@@ -296,29 +297,27 @@ shape = SubResource("RectangleShape2D_6p85w")
 disabled = true
 
 [node name="Down" type="Sprite2D" parent="Sword"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(0, 56)
 rotation = 1.5708
 texture = ExtResource("7_ouvco")
 
 [node name="Area2D" type="Area2D" parent="Sword/Down"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 2056
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Down/Area2D"]
-position = Vector2(-8, 0)
-shape = SubResource("RectangleShape2D_6p85w")
+position = Vector2(-24, -2.91038e-11)
+shape = SubResource("RectangleShape2D_2pkp3")
 disabled = true
 
 [node name="Up" type="Sprite2D" parent="Sword"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(0, -40)
 rotation = 4.71239
 texture = ExtResource("7_ouvco")
 
 [node name="Area2D" type="Area2D" parent="Sword/Up"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 2056
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Up/Area2D"]
 position = Vector2(-8, 0)
@@ -334,7 +333,7 @@ disabled = true
 [connection signal="body_entered" from="extraCollisions/Vines" to="." method="_on_vines_body_entered"]
 [connection signal="body_exited" from="extraCollisions/Vines" to="." method="_on_vines_body_exited"]
 [connection signal="body_entered" from="extraCollisions/SheepBlocks" to="." method="_on_sheep_blocks_body_entered"]
-[connection signal="area_entered" from="Sword/Right/Area2D" to="." method="_on_area_2d_area_entered"]
-[connection signal="area_entered" from="Sword/Left/Area2D" to="." method="_on_area_2d_area_entered"]
-[connection signal="area_entered" from="Sword/Down/Area2D" to="." method="_on_area_2d_area_entered"]
-[connection signal="area_entered" from="Sword/Up/Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="Sword/Right/Area2D" to="." method="_on_right_sword_bounce"]
+[connection signal="body_entered" from="Sword/Left/Area2D" to="." method="_on_left_sword_bounce"]
+[connection signal="body_entered" from="Sword/Down/Area2D" to="." method="_on_down_sword_bounce"]
+[connection signal="body_entered" from="Sword/Up/Area2D" to="." method="_on_up_sword_bounce"]

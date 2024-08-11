@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://d2hc8cnstftf"]
+[gd_scene load_steps=14 format=4 uid="uid://d2hc8cnstftf"]
 
 [ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="1_co1uj"]
 [ext_resource type="PackedScene" uid="uid://bm40t36a6m8sc" path="res://Objects/Tiles/til32x32.tscn" id="2_dj5jn"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="7_20hxy"]
 [ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_f58xy"]
 [ext_resource type="PackedScene" uid="uid://bgsapabrymhnx" path="res://Objects/Rnd/Skills/weaponUI.tscn" id="9_h3xkj"]
+[ext_resource type="PackedScene" uid="uid://dmndpodih11jb" path="res://Objects/Hazards/tilSpikes16.tscn" id="9_rwxdl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ektps"]
 texture = ExtResource("3_82uxd")
@@ -96,7 +97,7 @@ stop_right_at = 800
 stop_down_at = 1216
 
 [node name="objPlayer" parent="Room_related" instance=ExtResource("6_dvpyv")]
-position = Vector2(112, 528)
+position = Vector2(682, 515)
 
 [node name="SkillPickup2" parent="Room_related" instance=ExtResource("8_f58xy")]
 position = Vector2(280, 544)
@@ -110,7 +111,7 @@ position = Vector2(368, 544)
 item = 6
 
 [node name="SkillPickup4" parent="Room_related" instance=ExtResource("8_f58xy")]
-position = Vector2(512, 480)
+position = Vector2(704, 536)
 item = 4
 
 [node name="SkillPickup5" parent="Room_related" instance=ExtResource("8_f58xy")]
@@ -120,6 +121,9 @@ item = 3
 [node name="Gimmicks" type="Node2D" parent="."]
 
 [node name="Hazards" type="Node2D" parent="."]
+
+[node name="Spike16Layer" parent="Hazards" instance=ExtResource("9_rwxdl")]
+tile_map_data = PackedByteArray("AAAuAB4AAAABAAAAAAAvABwAAQAAAAEAAAAvABkAAQAAAAEAAAAvABYAAQAAAAEAAAA=")
 
 [node name="Trigger_related" type="Node2D" parent="."]
 

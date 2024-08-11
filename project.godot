@@ -235,6 +235,7 @@ button_switch_weapon={
 2d_physics/layer_9="Triggers"
 2d_physics/layer_10="Vines"
 2d_physics/layer_11="SheepBlocks"
+2d_physics/layer_12="Bounceable"
 
 [rendering]
 

@@ -577,6 +577,11 @@ func _on_sheep_blocks_body_entered(body):
 ## GAMEJAM SHENANIGANS
 ########################################################
 
+enum {
+	LEFT,
+	RIGHT
+}
+
 var ITEMS := RND.ITEMS;
 
 var permanent_items = []
@@ -593,11 +598,11 @@ var current_dash_duration: float = 0;
 var dash_cooldown: float = 0.5
 var current_dash_cooldown: float = 0;
 var can_dash = false;
-var dash_direction := "left";
+var dash_direction := LEFT;
 
 var wall_jump_duration: float = 0.1;
 var current_wall_jump_duration : float = 0;
-var wall_jump_direction := "left";
+var wall_jump_direction := LEFT;
 var just_walljumped = false;
 
 var weapon = null;
@@ -608,6 +613,10 @@ var sword_duration = 0.2;
 var current_sword_duration = 0;
 var sword_cooldown = 0.3;
 var current_sword_cooldown = 0;
+var side_bounce_duration = 0.1;
+var current_side_bounce_duration = 0;
+var side_bounce_speed = 400;
+var side_bounce_direction = LEFT;
 
 # proper
 #var default_items = [ITEMS.JUMP, ITEMS.DOUBLE_JUMP, ITEMS.GUN]
@@ -671,6 +680,10 @@ func set_initial_state():
 	can_dash = false
 	weapons = []
 	weapon = null;
+	$Sword/Right.modulate.a = 0
+	$Sword/Left.modulate.a = 0
+	$Sword/Up.modulate.a = 0
+	$Sword/Down.modulate.a = 0
 
 func handle_rnd_stuff(delta):
 	handle_dash(delta)
@@ -691,16 +704,16 @@ func handle_dash(delta):
 		current_dash_cooldown = dash_cooldown;
 		can_dash = false
 		if Input.is_action_pressed("button_left"):
-			dash_direction = "left"
+			dash_direction = LEFT
 		elif Input.is_action_pressed("button_right"):
-			dash_direction = "right"
+			dash_direction = RIGHT
 		else:
-			dash_direction = "right" if xscale else "left"
+			dash_direction = RIGHT if xscale else LEFT
 
 	if current_dash_duration > 0:
-		if dash_direction == "left":
+		if dash_direction == LEFT:
 			velocity.x = -dash_speed
-		elif dash_direction == "right":
+		elif dash_direction == RIGHT:
 			velocity.x = dash_speed
 	
 func handle_walljumping(delta):
@@ -735,7 +748,7 @@ func handle_walljumping(delta):
 			velocity.y = -s_jump_speed
 			is_walljumping = false
 			GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndJump)
-			wall_jump_direction = "right" if jump_direction.x > 0 else "left";
+			wall_jump_direction = RIGHT if jump_direction.x > 0 else LEFT;
 			current_wall_jump_duration = wall_jump_duration;
 			just_walljumped = true;
 			
@@ -747,7 +760,7 @@ func handle_walljumping(delta):
 			walljumping_action.call()
 	
 	if current_wall_jump_duration > 0:
-		if wall_jump_direction == "right":
+		if wall_jump_direction == RIGHT:
 			velocity.x = h_speed
 		else:
 			velocity.x = -h_speed
@@ -796,6 +809,9 @@ func handle_sword(delta):
 		current_sword_duration = max(0, current_sword_duration - delta)
 	if current_sword_cooldown > 0:
 		current_sword_cooldown = max(0, current_sword_cooldown - delta)
+	if current_side_bounce_duration > 0:
+		current_side_bounce_duration = max(0, current_side_bounce_duration - delta)
+		velocity.x = side_bounce_speed if side_bounce_direction == RIGHT else -side_bounce_speed
 	
 	if Input.is_action_just_pressed("button_shoot") && current_sword_cooldown == 0:
 		current_sword_duration = sword_duration;
@@ -810,15 +826,37 @@ func handle_sword(delta):
 			sword_node = $Sword/Right
 		else:
 			sword_node = $Sword/Right if xscale else $Sword/Left;
+		sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", false);
 	
 	if current_sword_duration > 0:
 		sword_node.modulate.a = current_sword_duration / sword_duration;
-		sword_node.get_node("Area2D/CollisionShape2D").disabled = false;
 	else:
 		sword_node.modulate.a = 0;
-		sword_node.get_node("Area2D/CollisionShape2D").disabled = true;
+		sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
+
+func _on_bounce():
+	sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
+	
+
+func _on_right_sword_bounce(body: Node2D) -> void:
+	side_bounce_direction = LEFT
+	current_side_bounce_duration = side_bounce_duration
+	_on_bounce()
 
 
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	print(sword_node.name)
-	pass # Replace with function body.
+func _on_left_sword_bounce(body: Node2D) -> void:
+	side_bounce_direction = RIGHT
+	current_side_bounce_duration = side_bounce_duration
+	_on_bounce()
+
+
+func _on_down_sword_bounce(body: Node2D) -> void:
+	velocity.y = -300
+	djumps = max_djumps
+	_on_bounce()
+
+
+func _on_up_sword_bounce(body: Node2D) -> void:
+	if velocity.y < 200:
+		velocity.y = 200;
+	_on_bounce()
