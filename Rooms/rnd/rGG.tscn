@@ -19,8 +19,9 @@ song_id = ExtResource("2_mstnw")
 
 [node name="Room_related" type="Node2D" parent="."]
 
-[node name="objCameraFixed" parent="Room_related" instance=ExtResource("2_jxl4t")]
+[node name="objCameraFixed" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("2_jxl4t")]
 position = Vector2(-16, 48)
+target_node = NodePath("../../objPlayer")
 
 [node name="Gimmicks" type="Node2D" parent="."]
 

@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://cleeq8w1eltck"]
+
+[ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_5fs11"]
+[ext_resource type="PackedScene" uid="uid://mnklt76bdhlw" path="res://Objects/Rnd/room/hint_sign.tscn" id="2_kttey"]
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="3_7xwpw"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="4_j8jfy"]
+[ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="5_by1tr"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="6_ef8ou"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="7_1bb2m"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_ihnij"]
+[ext_resource type="PackedScene" uid="uid://cu54hxafh2i6t" path="res://Objects/Room_objects/objSignProximity.tscn" id="9_rpjye"]
+
+[node name="rTemplate" type="Node2D"]
+
+[node name="DaySetup" parent="." instance=ExtResource("1_5fs11")]
+starting_items = Array[int]([4])
+day = 5
+day_name = "World 5: No-Legs"
+
+[node name="HintSign" parent="." node_paths=PackedStringArray("order") instance=ExtResource("2_kttey")]
+position = Vector2(168, -16)
+order = [NodePath("../Room_related/pickups/Lake"), NodePath("../Room_related/pickups/Cave"), NodePath("../Room_related/pickups/NearIsland"), NodePath("../Room_related/pickups/SpikeTower")]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("3_7xwpw")]
+position = Vector2(-16, 16)
+song_id = ExtResource("4_j8jfy")
+
+[node name="Node2D" parent="Environment" instance=ExtResource("5_by1tr")]
+warp_to = "res://Rooms/rnd/rDay6.tscn"
+
+[node name="Room_related" type="Node2D" parent="."]
+
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("6_ef8ou")]
+position = Vector2(-16, 48)
+target_node = NodePath("../objPlayer")
+stop_left_at = -3000
+stop_up_at = -2000
+stop_right_at = 2000
+stop_down_at = 2000
+
+[node name="objPlayer" parent="Room_related" instance=ExtResource("7_1bb2m")]
+position = Vector2(0, -16)
+
+[node name="pickups" type="Node2D" parent="Room_related"]
+
+[node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("8_ihnij")]
+position = Vector2(-1168, 448)
+item = 8
+hint = "Bullets also reset on the ground, even mid-shot. You need 5 to reach the island"
+
+[node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("8_ihnij")]
+position = Vector2(-2240, 448)
+item = 17
+hint = "There's an even further island far to the left!"
+
+[node name="Cave" parent="Room_related/pickups" instance=ExtResource("8_ihnij")]
+position = Vector2(168, 800)
+item = 7
+hint = "They really gotta fix the maze. It's atrocious"
+
+[node name="Lake" parent="Room_related/pickups" instance=ExtResource("8_ihnij")]
+position = Vector2(256, 1376)
+item = 5
+hint = "Buried treasure deep below"
+
+[node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("8_ihnij")]
+position = Vector2(1256, -64)
+item = 6
+hint = "Hitting a spike with the sword also refreshes your bullet count!"
+
+[node name="Gimmicks" type="Node2D" parent="."]
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Trigger_related" type="Node2D" parent="."]
+
+[node name="objSignProximity" parent="." instance=ExtResource("9_rpjye")]
+position = Vector2(488, 784)
+sign_text = "Press c (or RT) to switch weapons"

@@ -1,0 +1,80 @@
+[gd_scene load_steps=10 format=3 uid="uid://olhcfhlandcr"]
+
+[ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_i01sl"]
+[ext_resource type="PackedScene" uid="uid://mnklt76bdhlw" path="res://Objects/Rnd/room/hint_sign.tscn" id="2_kxys6"]
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="3_prh5g"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="4_hwhgj"]
+[ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="5_arglo"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="6_2iqgv"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="7_wa1m7"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_cw7wv"]
+[ext_resource type="PackedScene" uid="uid://cu54hxafh2i6t" path="res://Objects/Room_objects/objSignProximity.tscn" id="9_xhjbc"]
+
+[node name="rTemplate" type="Node2D"]
+
+[node name="DaySetup" parent="." instance=ExtResource("1_i01sl")]
+starting_items = Array[int]([7, 10])
+day = 4
+day_name = "World 4: Escaping a city"
+
+[node name="HintSign" parent="." node_paths=PackedStringArray("order") instance=ExtResource("2_kxys6")]
+position = Vector2(168, -16)
+order = [NodePath("../Room_related/pickups/Lake"), NodePath("../Room_related/pickups/Cave"), NodePath("../Room_related/pickups/NearIsland"), NodePath("../Room_related/pickups/SpikeTower")]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("3_prh5g")]
+position = Vector2(-16, 16)
+song_id = ExtResource("4_hwhgj")
+
+[node name="Node2D" parent="Environment" instance=ExtResource("5_arglo")]
+warp_to = "res://Rooms/rnd/rDay5.tscn"
+
+[node name="Room_related" type="Node2D" parent="."]
+
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("6_2iqgv")]
+position = Vector2(-16, 48)
+target_node = NodePath("../objPlayer")
+stop_left_at = -3000
+stop_up_at = -2000
+stop_right_at = 2000
+stop_down_at = 2000
+
+[node name="objPlayer" parent="Room_related" instance=ExtResource("7_wa1m7")]
+position = Vector2(0, -16)
+
+[node name="pickups" type="Node2D" parent="Room_related"]
+
+[node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("8_cw7wv")]
+position = Vector2(-1168, 448)
+item = 11
+hint = "Dashes reset when you're on the ground, even if you are mid-dash already"
+
+[node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("8_cw7wv")]
+position = Vector2(-2240, 448)
+item = 14
+hint = "There's an even further island far to the left!"
+
+[node name="Cave" parent="Room_related/pickups" instance=ExtResource("8_cw7wv")]
+position = Vector2(168, 800)
+item = 1
+hint = "The backdoor? More like the front door of the maze now"
+
+[node name="Lake" parent="Room_related/pickups" instance=ExtResource("8_cw7wv")]
+position = Vector2(256, 1376)
+item = 8
+hint = "Buried treasure deep below"
+
+[node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("8_cw7wv")]
+position = Vector2(1256, -64)
+hint = "The spike tower might be keeping something safe"
+
+[node name="Gimmicks" type="Node2D" parent="."]
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Trigger_related" type="Node2D" parent="."]
+
+[node name="objSignProximity" parent="." instance=ExtResource("9_xhjbc")]
+position = Vector2(240, 784)
+sign_text = "Tapping R resets you to your last safe location"

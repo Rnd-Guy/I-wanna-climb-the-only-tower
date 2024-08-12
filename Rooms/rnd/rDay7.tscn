@@ -1,0 +1,76 @@
+[gd_scene load_steps=9 format=3 uid="uid://btu7dnf1ppy0q"]
+
+[ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_8bc42"]
+[ext_resource type="PackedScene" uid="uid://mnklt76bdhlw" path="res://Objects/Rnd/room/hint_sign.tscn" id="2_160t8"]
+[ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="3_c3vrd"]
+[ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="4_ocagu"]
+[ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="5_clcmn"]
+[ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="6_7gr7s"]
+[ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="7_e5dvo"]
+[ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="8_6l74m"]
+
+[node name="rTemplate" type="Node2D"]
+
+[node name="DaySetup" parent="." instance=ExtResource("1_8bc42")]
+starting_items = Array[int]([7])
+day = 7
+day_name = "World 7: Low%"
+
+[node name="HintSign" parent="." node_paths=PackedStringArray("order") instance=ExtResource("2_160t8")]
+position = Vector2(168, -16)
+order = [NodePath("../Room_related/pickups/Lake"), NodePath("../Room_related/pickups/NearIsland"), NodePath("../Room_related/pickups/Cave"), NodePath("../Room_related/pickups/SpikeTower")]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="objMusicPlayer" parent="Environment" instance=ExtResource("3_c3vrd")]
+position = Vector2(-16, 16)
+song_id = ExtResource("4_ocagu")
+
+[node name="Node2D" parent="Environment" instance=ExtResource("5_clcmn")]
+warp_to = "res://Rooms/rnd/rGG.tscn"
+
+[node name="Room_related" type="Node2D" parent="."]
+
+[node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("6_7gr7s")]
+position = Vector2(-16, 48)
+target_node = NodePath("../objPlayer")
+stop_left_at = -3000
+stop_up_at = -2000
+stop_right_at = 2000
+stop_down_at = 2000
+
+[node name="objPlayer" parent="Room_related" instance=ExtResource("7_e5dvo")]
+position = Vector2(0, -16)
+
+[node name="pickups" type="Node2D" parent="Room_related"]
+
+[node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("8_6l74m")]
+position = Vector2(-1168, 448)
+item = 10
+hint = "Yup... It's veni vidi vici time. To reach the island you gotta go all the way up first"
+
+[node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("8_6l74m")]
+position = Vector2(-2240, 448)
+item = 17
+hint = "There's an even further island far to the left!"
+
+[node name="Cave" parent="Room_related/pickups" instance=ExtResource("8_6l74m")]
+position = Vector2(168, 800)
+item = 11
+hint = "A low effort maze lies below us. Maybe it'll be a bit more threatening later."
+
+[node name="Lake" parent="Room_related/pickups" instance=ExtResource("8_6l74m")]
+position = Vector2(256, 1376)
+item = 8
+hint = "Buried treasure deep below"
+
+[node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("8_6l74m")]
+position = Vector2(1256, -64)
+item = 9
+hint = "The spike tower might be keeping something safe"
+
+[node name="Gimmicks" type="Node2D" parent="."]
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Trigger_related" type="Node2D" parent="."]

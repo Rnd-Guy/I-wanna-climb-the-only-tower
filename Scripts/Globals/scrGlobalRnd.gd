@@ -26,6 +26,8 @@ enum ITEMS {
 	DAY_5_STAR,
 	DAY_6_STAR,
 	DAY_7_STAR,
+	
+	QUAD_JUMP,
 }
 
 enum DIR {

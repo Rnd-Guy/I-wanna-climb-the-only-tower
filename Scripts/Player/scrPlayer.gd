@@ -592,8 +592,8 @@ var items = []
 
 var max_djumps = 0;
 var djumps = 0;
-var can_jump = true;
-var can_shoot = true;
+var can_jump = false;
+var can_shoot = false;
 
 var dash_speed: int = 400
 var dash_duration: float = 0.25
@@ -793,7 +793,7 @@ func handle_jumping() -> void:
 		# and they are the ones who set d_jump_aux to true or false.
 		# Same logic applies to water
 		#elif d_jump or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump:
-		elif !just_walljumped && current_dash_duration == 0 && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
+		elif !is_on_floor() && !just_walljumped && current_dash_duration == 0 && (djumps > 0 or d_jump_aux or in_water or GLOBAL_GAME.debug_inf_jump):
 
 			#velocity.y = -d_jump_speed
 			#d_jump = false
@@ -973,6 +973,7 @@ func _on_bounce():
 	sword_node.get_node("Area2D/CollisionShape2D").set_deferred("disabled", true);
 	GLOBAL_SOUNDS.play_sound(GLOBAL_SOUNDS.sndSwordBounce)
 	
+	
 
 func _on_right_sword_bounce(body: Node2D) -> void:
 	side_bounce_direction = DIR.LEFT
@@ -992,6 +993,7 @@ func _on_down_sword_bounce(body: Node2D) -> void:
 	if has_item(ITEMS.DASH):
 		can_dash = true
 	_on_bounce()
+	current_bullets = bullets
 
 
 func _on_up_sword_bounce(body: Node2D) -> void:

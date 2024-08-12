@@ -64,7 +64,8 @@ func _ready():
 func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("button_debug"):
-		toggle_debug_mode()
+		#toggle_debug_mode()
+		pass
 	
 	if Input.is_action_just_pressed("button_music"):
 		pause_music()

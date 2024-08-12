@@ -1,18 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://cdtdkhg4lm8yd"]
+[gd_scene load_steps=10 format=3 uid="uid://b34lvnglaa5w4"]
 
 [ext_resource type="PackedScene" uid="uid://b5l2vq7axcs5k" path="res://Objects/Rnd/room/day_setup.tscn" id="1_k4dgm"]
+[ext_resource type="PackedScene" uid="uid://mnklt76bdhlw" path="res://Objects/Rnd/room/hint_sign.tscn" id="2_1kll3"]
 [ext_resource type="PackedScene" uid="uid://byy0nyaw6gtki" path="res://Objects/Room_objects/objMusicPlayer.tscn" id="2_lainw"]
 [ext_resource type="AudioStream" uid="uid://wsa1xvjjlsrr" path="res://Audio/Music/Mimic - Rage & Scream - Ace Combat 7.ogg" id="3_8k7y2"]
 [ext_resource type="PackedScene" uid="uid://diqydqyaklqwn" path="res://Objects/Rnd/room/theRoom.tscn" id="4_nylwj"]
 [ext_resource type="PackedScene" uid="uid://cdx3h81o7hqb4" path="res://Objects/Room_objects/objCameraDynamic.tscn" id="5_xpobl"]
 [ext_resource type="PackedScene" uid="uid://bp5rqk4l7tesk" path="res://Objects/Player/objPlayer.tscn" id="6_b5bgs"]
 [ext_resource type="PackedScene" uid="uid://r46b1o0q6tpg" path="res://Objects/Rnd/Skills/pickup.tscn" id="7_3ydpi"]
+[ext_resource type="PackedScene" uid="uid://cu54hxafh2i6t" path="res://Objects/Room_objects/objSignProximity.tscn" id="9_k23dv"]
 
 [node name="rTemplate" type="Node2D"]
 
 [node name="DaySetup" parent="." instance=ExtResource("1_k4dgm")]
-starting_items = Array[int]([0, 7])
+starting_items = Array[int]([0, 4])
 day = 2
+day_name = "World 2: A world about a cave"
+
+[node name="HintSign" parent="." node_paths=PackedStringArray("order") instance=ExtResource("2_1kll3")]
+position = Vector2(168, -16)
+order = [NodePath("../Room_related/pickups/Lake"), NodePath("../Room_related/pickups/Cave"), NodePath("../Room_related/pickups/NearIsland"), NodePath("../Room_related/pickups/SpikeTower")]
 
 [node name="Environment" type="Node2D" parent="."]
 
@@ -20,15 +27,15 @@ day = 2
 position = Vector2(-16, 16)
 song_id = ExtResource("3_8k7y2")
 
-[node name="room" parent="Environment" instance=ExtResource("4_nylwj")]
-warp_to = "res://Rooms/rnd/rGG.tscn"
+[node name="Node2D" parent="Environment" instance=ExtResource("4_nylwj")]
+warp_to = "res://Rooms/rnd/rDay3.tscn"
 
 [node name="Room_related" type="Node2D" parent="."]
 
 [node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("5_xpobl")]
 position = Vector2(-16, 48)
 target_node = NodePath("../objPlayer")
-stop_left_at = -2000
+stop_left_at = -3000
 stop_up_at = -2000
 stop_right_at = 2000
 stop_down_at = 2000
@@ -40,26 +47,42 @@ position = Vector2(0, -16)
 
 [node name="NearIsland" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
 position = Vector2(-1168, 448)
-hint = null
+item = 9
+hint = "Space out your bullets to travel a longer distance!"
 
 [node name="FarIsland" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
 position = Vector2(-2240, 448)
-hint = null
+item = 14
+hint = "There's an even further island far to the left!"
 
 [node name="Cave" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
-position = Vector2(368, 800)
-hint = null
+position = Vector2(168, 800)
+item = 11
+hint = "You can beat the gravity using the recoil to skip the maze!"
 
-[node name="TestItem" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
-position = Vector2(128, 0)
-hint = null
+[node name="Lake" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
+position = Vector2(256, 1376)
+item = 5
+hint = "Buried treasure deep below"
 
 [node name="SpikeTower" parent="Room_related/pickups" instance=ExtResource("7_3ydpi")]
 position = Vector2(1256, -64)
-hint = null
+hint = "Walljumps will reset your bullets back to 4"
 
 [node name="Gimmicks" type="Node2D" parent="."]
 
 [node name="Hazards" type="Node2D" parent="."]
 
 [node name="Trigger_related" type="Node2D" parent="."]
+
+[node name="objSignProximity" parent="." instance=ExtResource("9_k23dv")]
+position = Vector2(208, 1360)
+sign_text = "Hold up or down to shoot in that direction!"
+
+[node name="objSignProximity2" parent="." instance=ExtResource("9_k23dv")]
+position = Vector2(-96, -16)
+sign_text = "Each world starts you with different items!"
+
+[node name="objSignProximity3" parent="." instance=ExtResource("9_k23dv")]
+position = Vector2(1008, 432)
+sign_text = "4 bullets get reset whenever you're on the floor, but some other actions also reset the counter on things"

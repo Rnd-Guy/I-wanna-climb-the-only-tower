@@ -34,7 +34,7 @@ warp_to = "res://Rooms/rnd/rDay2.tscn"
 [node name="objCameraDynamic" parent="Room_related" node_paths=PackedStringArray("target_node") instance=ExtResource("4_wrcd3")]
 position = Vector2(-16, 48)
 target_node = NodePath("../objPlayer")
-stop_left_at = -2000
+stop_left_at = -3000
 stop_up_at = -2000
 stop_right_at = 2000
 stop_down_at = 2000
@@ -80,4 +80,4 @@ sign_text = "Hold R to return to the starting location! Progress is saved automa
 
 [node name="objSignProximity2" parent="." instance=ExtResource("9_5ab7r")]
 position = Vector2(-720, 432)
-sign_text = "Press X to dash if you have it!"
+sign_text = "Press X (or LT) to dash if you have it!"
