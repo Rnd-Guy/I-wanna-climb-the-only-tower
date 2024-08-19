@@ -732,7 +732,6 @@ func reset_movement_state():
 	can_jump = false;
 	can_dash = false;
 	djumps = max_djumps;
-	bullets = 4
 	current_dash_duration = 0
 	current_dash_cooldown = 0
 	current_autofire_timer = 0
